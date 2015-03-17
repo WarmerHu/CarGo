@@ -14,7 +14,9 @@ public class Account {
 	private Long id;
 	private String name;
 	private String password;
+	private String auth_token;
 	
+
 	@Id
 	@GeneratedValue(generator="inc")
 	@GenericGenerator(name="inc",strategy="increment")
@@ -38,6 +40,14 @@ public class Account {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	@Column(name="auth_token")
+	public String getAuth_token() {
+		return auth_token;
+	}
+	public void setAuth_token(String auth_token) {
+		this.auth_token = auth_token;
 	}
 	
 }

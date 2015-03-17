@@ -13,4 +13,8 @@ public class AccountDao extends BaseDao<Account> implements IAccountDao {
 		setClazz(Account.class);
 	}
 	
+	public Account findByName(String name){
+		return (Account) getCurrentSession().createQuery("from Account as a where a.name = ?").setString(0, name).uniqueResult();
+	}
+	
 }

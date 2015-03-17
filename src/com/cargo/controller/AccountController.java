@@ -1,5 +1,7 @@
 package com.cargo.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import sun.misc.BASE64Encoder;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
@@ -22,13 +26,11 @@ public class AccountController {
 
 	@RequestMapping(value="/accounts",method=RequestMethod.POST)
 	public @ResponseBody Account create(@RequestBody Account account){
-		System.out.println(account);
 		return dao.find(dao.create(account));
 	}
 	
 	@RequestMapping(value="/accounts/{id}",method=RequestMethod.GET)
 	public @ResponseBody Account show(@PathVariable Long id){
-		System.out.println(dao.find(id));
 		return dao.find(id);
 	}
 	
@@ -48,5 +50,22 @@ public class AccountController {
 		account.setId(id);
 		dao.update(account);
 		return dao.find(account.getId());
+	}
+	
+	@RequestMapping(value="/login/{id}",method=RequestMethod.POST)
+	public @ResponseBody Account login(@RequestBody Account a, @PathVariable Long id) throws NoSuchAlgorithmException{
+		Account account = dao.find(id);
+		if (account.getPassword().equals(a.getPassword())){
+			String encrypt = new BASE64Encoder().encode((account.getName()+ " " + new String(encryptMD5(a.getPassword().getBytes()))).getBytes()).toString();
+			account.setAuth_token(encrypt);
+			dao.update(account);
+		}
+		return account;
+	}
+
+	private byte[] encryptMD5(byte[] data) throws NoSuchAlgorithmException {
+		MessageDigest md5 = MessageDigest.getInstance("MD5");  
+	    md5.update(data);  
+	    return md5.digest(); 
 	}
 }
