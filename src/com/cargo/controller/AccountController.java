@@ -1,6 +1,5 @@
 package com.cargo.controller;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -12,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import sun.misc.BASE64Encoder;
-
 import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
+import com.cargo.util.Encrypter;
 
 
 @Controller
@@ -56,16 +54,10 @@ public class AccountController {
 	public @ResponseBody Account login(@RequestBody Account a, @PathVariable Long id) throws NoSuchAlgorithmException{
 		Account account = dao.find(id);
 		if (account.getPassword().equals(a.getPassword())){
-			String encrypt = new BASE64Encoder().encode((account.getName()+ " " + new String(encryptMD5(a.getPassword().getBytes()))).getBytes()).toString();
+			String encrypt = Encrypter.encode(account.getName() + " " + a.getPassword());
 			account.setAuth_token(encrypt);
 			dao.update(account);
 		}
 		return account;
-	}
-
-	private byte[] encryptMD5(byte[] data) throws NoSuchAlgorithmException {
-		MessageDigest md5 = MessageDigest.getInstance("MD5");  
-	    md5.update(data);  
-	    return md5.digest(); 
 	}
 }
