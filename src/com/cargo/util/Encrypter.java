@@ -4,19 +4,18 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.springframework.util.Base64Utils;
 
 public class Encrypter {
 	
 	
 
 	public static String encode(String ss){
-		return new BASE64Encoder().encode(ss.getBytes());
+		return Base64Utils.encodeToString(ss.getBytes());
 	}
 	
 	public static String decode(String ss) throws IOException{
-		return new String(new BASE64Decoder().decodeBuffer(ss));
+		return new String(Base64Utils.decodeFromString(ss));
 	}
 	
 	public static String encryptMD5(byte[] data) throws NoSuchAlgorithmException {

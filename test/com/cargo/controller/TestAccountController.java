@@ -96,7 +96,6 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
-				.andDo(MockMvcResultHandlers.print())
 				.andReturn();
 	}
 	
@@ -109,6 +108,16 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 				.andExpect(status().isNoContent())
 				.andReturn();
 		Assert.isNull(dao.find(account.getId()));
+	}
+	
+	@Test
+	public void login() throws Exception{
+		String requestbody = "{\"name\":\"test\",\"password\":\"test\"}";
+		mocMvc.perform(post("/accounts/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestbody))
+				.andExpect(jsonPath("$.auth_token").exists())
+				.andReturn();
 	}
 	
 	@After

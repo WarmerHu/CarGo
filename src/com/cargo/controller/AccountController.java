@@ -53,13 +53,16 @@ public class AccountController {
 		return dao.find(account.getId());
 	}
 	
-	@RequestMapping(value="/login/{id}",method=RequestMethod.POST)
-	public @ResponseBody Account login(@RequestBody Account a, @PathVariable Long id) throws NoSuchAlgorithmException{
-		Account account = dao.find(id);
-		if (account.getPassword().equals(a.getPassword())){
-			String encrypt = Encrypter.encode(account.getName() + " " + a.getPassword());
+	@RequestMapping(value="/accounts/login",method=RequestMethod.POST)
+	public @ResponseBody Account login(@RequestBody Account a) throws NoSuchAlgorithmException{
+		Account account = dao.findByName(a.getName());
+		System.out.println(account);
+		if (account != null && account.getPassword().equals(a.getPassword())){
+			String encrypt = Encrypter.encode(a.getName() + " " + a.getPassword());
 			account.setAuth_token(encrypt);
 			dao.update(account);
+		} else {
+			account = null;
 		}
 		return account;
 	}
