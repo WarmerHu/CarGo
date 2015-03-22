@@ -4,12 +4,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
@@ -23,6 +25,7 @@ public class AccountController {
 	private IAccountDao dao;
 
 	@RequestMapping(value="/accounts",method=RequestMethod.POST)
+	@ResponseStatus(value=HttpStatus.CREATED)
 	public @ResponseBody Account create(@RequestBody Account account){
 		return dao.find(dao.create(account));
 	}
@@ -38,9 +41,9 @@ public class AccountController {
 	}
 	
 	@RequestMapping(value="/accounts/{id}",method=RequestMethod.DELETE)
-	public @ResponseBody String delete(@PathVariable Long id){
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public @ResponseBody void delete(@PathVariable Long id){
 		dao.deleteById(id);
-		return "";
 	}
 	
 	@RequestMapping(value="/accounts/{id}",method=RequestMethod.PATCH)
@@ -60,4 +63,5 @@ public class AccountController {
 		}
 		return account;
 	}
+	
 }

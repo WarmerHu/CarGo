@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry including="**/*.java" kind="src" output="WebRoot/WEB-INF/classes" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="config"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
