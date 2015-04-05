@@ -18,49 +18,49 @@ import com.cargo.model.Account;
 import com.cargo.util.Encrypter;
 
 
-@Controller
+@Controller(value="/accounts")
 public class AccountController {
 	
 	@Autowired
-	private IAccountDao dao;
+	private IAccountDao accountDao;
 
-	@RequestMapping(value="/accounts",method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public @ResponseBody Account create(@RequestBody Account account){
-		return dao.find(dao.create(account));
+		return accountDao.create(account);
 	}
 	
-	@RequestMapping(value="/accounts/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public @ResponseBody Account show(@PathVariable Long id){
-		return dao.find(id);
+		return accountDao.find(id);
 	}
 	
-	@RequestMapping(value="/accounts",method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody List<Account> list(){
-		return dao.findAll();
+		return accountDao.findAll();
 	}
 	
-	@RequestMapping(value="/accounts/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public @ResponseBody void delete(@PathVariable Long id){
-		dao.deleteById(id);
+		accountDao.deleteById(id);
 	}
 	
 	@RequestMapping(value="/accounts/{id}",method=RequestMethod.PATCH)
 	public @ResponseBody Account patch(@RequestBody Account account,@PathVariable Long id){
 		account.setId(id);
-		dao.update(account);
-		return dao.find(account.getId());
+		accountDao.update(account);
+		return accountDao.find(account.getId());
 	}
 	
-	@RequestMapping(value="/accounts/login",method=RequestMethod.POST)
+	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public @ResponseBody Account login(@RequestBody Account a) throws NoSuchAlgorithmException{
-		Account account = dao.findByName(a.getName());
+		Account account = accountDao.findByName(a.getName());
 		System.out.println(account);
 		if (account != null && account.getPassword().equals(a.getPassword())){
 			String encrypt = Encrypter.encode(a.getName() + " " + a.getPassword());
 			account.setAuth_token(encrypt);
-			dao.update(account);
+			accountDao.update(account);
 		} else {
 			account = null;
 		}

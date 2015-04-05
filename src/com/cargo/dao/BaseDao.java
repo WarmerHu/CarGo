@@ -33,9 +33,9 @@ public class BaseDao<T> implements IBaseDao<T> {
 		return getCurrentSession().createQuery("from " + clazz.getName()).list();
 	}
 
-	public Long create(T entity) {
+	public T create(T entity) {
 		Preconditions.checkNotNull(entity);
-        return (Long)getCurrentSession().save(entity);
+        return this.find((Long) getCurrentSession().save(entity));
 	}
 
 	public T update(T entity) {

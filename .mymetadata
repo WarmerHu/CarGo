@@ -4,7 +4,7 @@
   name="CarGo"
   id="myeclipse.1426090141513"
   context-root="/CarGo"
-  j2ee-spec="5.0"
+  j2ee-spec="6.0"
   archive="CarGo.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />

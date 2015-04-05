@@ -15,6 +15,9 @@ public class Encrypter {
 	}
 	
 	public static String decode(String ss) throws IOException{
+		if(ss == null){
+			return "";
+		}
 		return new String(Base64Utils.decodeFromString(ss));
 	}
 	

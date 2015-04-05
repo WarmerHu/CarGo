@@ -7,7 +7,7 @@ public interface IBaseDao<T> {
 
     public List<T> findAll();
 
-    public Long create(final T entity);
+    public T create(final T entity);
 
     public T update(final T entity);
 

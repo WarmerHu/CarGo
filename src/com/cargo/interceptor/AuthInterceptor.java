@@ -42,7 +42,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 		System.out.println(token);
 		String[] tokens = token.split(" ");
 		Account account = dao.findByName(tokens[0]);
-		if(account.getAuth_token().equals(encrypt))
+		if(account!=null&&account.getAuth_token().equals(encrypt))
 			System.out.println("你成功登录");
 		else 
 			System.out.println("你尚未登录");
