@@ -3,9 +3,13 @@ package com.cargo.controller;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import net.minidev.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,45 +19,53 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
+import com.cargo.model.Account.ProfileType;
 import com.cargo.util.Encrypter;
+import com.cargo.util.ProfileTypeEnumEditor;
 
 
-@Controller(value="/accounts")
+@Controller
 public class AccountController {
 	
 	@Autowired
 	private IAccountDao accountDao;
+	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) throws Exception{
+		binder.registerCustomEditor(ProfileType.class, new ProfileTypeEnumEditor());
+	}
 
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(value="/accounts",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public @ResponseBody Account create(@RequestBody Account account){
-		return accountDao.create(account);
+	public @ResponseBody JSONObject create(@RequestBody Account account,@RequestBody JSONObject obj){
+		account.setType(ProfileType.valueOf((String) obj.get("profileType")));
+		return accountDao.create(account).toJSON();
 	}
 	
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public @ResponseBody Account show(@PathVariable Long id){
-		return accountDao.find(id);
+	@RequestMapping(value="/accounts/{id}",method=RequestMethod.GET)
+	public @ResponseBody JSONObject show(@PathVariable Long id){
+		return accountDao.find(id).toJSON();
 	}
 	
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(value="/accounts",method=RequestMethod.GET)
 	public @ResponseBody List<Account> list(){
 		return accountDao.findAll();
 	}
 	
-	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/accounts/{id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public @ResponseBody void delete(@PathVariable Long id){
 		accountDao.deleteById(id);
 	}
 	
 	@RequestMapping(value="/accounts/{id}",method=RequestMethod.PATCH)
-	public @ResponseBody Account patch(@RequestBody Account account,@PathVariable Long id){
+	public @ResponseBody JSONObject patch(@RequestBody Account account,@PathVariable Long id){
 		account.setId(id);
 		accountDao.update(account);
-		return accountDao.find(account.getId());
+		return accountDao.find(account.getId()).toJSON();
 	}
 	
-	@RequestMapping(value="/login",method=RequestMethod.POST)
+	@RequestMapping(value="/accounts/login",method=RequestMethod.POST)
 	public @ResponseBody Account login(@RequestBody Account a) throws NoSuchAlgorithmException{
 		Account account = accountDao.findByName(a.getName());
 		System.out.println(account);

@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import net.minidev.json.JSONObject;
+
 import com.sun.istack.internal.NotNull;
 
 @Entity
@@ -25,6 +27,16 @@ public class Account {
 	private ProfileType type;
 	private String telephone;
 	private String email;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	@Column(name = "gender")
 	public String getGender() {
@@ -36,7 +48,7 @@ public class Account {
 	}
 
 	@NotNull
-	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.ORDINAL)
 	public ProfileType getType() {
 		return type;
 	}
@@ -61,16 +73,6 @@ public class Account {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	@NotNull
@@ -100,6 +102,17 @@ public class Account {
 
 	public void setAuth_token(String auth_token) {
 		this.auth_token = auth_token;
+	}
+	
+	public JSONObject toJSON(){
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("name", name);
+		obj.put("email", email);
+		obj.put("telephone", telephone);
+		obj.put("gender", gender);
+		obj.put("profileType", getType().toString());
+		return obj;
 	}
 
 }

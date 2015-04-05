@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,6 +25,7 @@ import org.springframework.util.Assert;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
+import com.cargo.model.Account.ProfileType;
 
 
 /**
@@ -50,19 +52,32 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 		Account account = new Account();
 		account.setName("test");
 		account.setPassword("test");
+		account.setEmail("test@test.com");
+		account.setGender("boy");
+		account.setTelephone("13456780123");
+		account.setType(ProfileType.Buyer);
 		dao.create(account);
 	}
 	
 	@Test
 	public void saveAccount() throws Exception{
-		String requestBody = "{\"name\":\"test\",\"password\":\"test\"}";
+		String requestBody="{\"name\":\"test\"," +
+							"\"password\":\"test\"," +
+							"\"email\":\"test@test.com\"," +
+							"\"gender\":\"boy\"," +
+							"\"password\":\"test\"," +
+							"\"telephone\":\"13456780123\"," +
+							"\"profileType\":\"Buyer\"}";
 		
 		mocMvc.perform(post("/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBody))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.name").value("test"))
-				.andExpect(jsonPath("$.password").value("test"))
+				.andExpect(jsonPath("$.email").value("test@test.com"))
+				.andExpect(jsonPath("$.gender").value("boy"))
+				.andExpect(jsonPath("$.telephone").value("13456780123"))
+				.andExpect(jsonPath("$.profileType").value("Buyer"))
 				.andReturn();
 	}
 	
@@ -73,19 +88,22 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value(account.getName()))
-				.andExpect(jsonPath("$.password").value(account.getPassword()))
+				.andExpect(jsonPath("$.email").value(account.getEmail()))
+				.andExpect(jsonPath("$.gender").value(account.getGender()))
+				.andExpect(jsonPath("$.telephone").value(account.getTelephone()))
+				.andExpect(jsonPath("$.profileType").value(account.getType().name()))
 				.andReturn();
 	}
 	
 	@Test
 	public void updateAccount() throws Exception{
 		Account account = dao.findAll().get(0);
-		String content = "{\"password\":\"test222\" }";
+		String content = "{\"telephone\":\"123456789\" }";
 		mocMvc.perform(patch("/accounts/{id}",account.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(content))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.password").value("test222"))
+				.andExpect(jsonPath("$.telephone").value("123456789"))
 				.andReturn();
 	}
 	
