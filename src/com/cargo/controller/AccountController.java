@@ -8,8 +8,6 @@ import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +19,6 @@ import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
 import com.cargo.model.Account.ProfileType;
 import com.cargo.util.Encrypter;
-import com.cargo.util.ProfileTypeEnumEditor;
 
 
 @Controller
@@ -29,11 +26,6 @@ public class AccountController {
 	
 	@Autowired
 	private IAccountDao accountDao;
-	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) throws Exception{
-		binder.registerCustomEditor(ProfileType.class, new ProfileTypeEnumEditor());
-	}
 
 	@RequestMapping(value="/accounts",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)

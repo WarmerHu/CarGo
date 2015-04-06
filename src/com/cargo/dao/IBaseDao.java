@@ -14,4 +14,8 @@ public interface IBaseDao<T> {
     public void delete(final T entity);
 
     public void deleteById(final long id);
+    
+    public void deleteAll();
+    
+    public T first();
 }

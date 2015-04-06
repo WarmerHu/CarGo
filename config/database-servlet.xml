@@ -36,7 +36,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 	</property>
 </bean>
  <!-- database -->
- <context:property-placeholder location="classpath:persistence-mysql.properties" />
+ <context:property-placeholder location="classpath:test-persistence-mysql.properties" />
 
  <bean id="sessionFactory" 
     class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

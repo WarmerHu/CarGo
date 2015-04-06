@@ -10,8 +10,6 @@ import javax.persistence.Id;
 
 import net.minidev.json.JSONObject;
 
-import com.sun.istack.internal.NotNull;
-
 @Entity
 public class Account {
 	
@@ -38,7 +36,7 @@ public class Account {
 		this.id = id;
 	}
 
-	@Column(name = "gender")
+	@Column(name = "gender",length=10)
 	public String getGender() {
 		return gender;
 	}
@@ -47,7 +45,6 @@ public class Account {
 		this.gender = gender;
 	}
 
-	@NotNull
 	@Enumerated(EnumType.ORDINAL)
 	public ProfileType getType() {
 		return type;
@@ -57,7 +54,7 @@ public class Account {
 		this.type = type;
 	}
 
-	@Column(name = "telephone")
+	@Column(name = "telephone",length=13)
 	public String getTelephone() {
 		return telephone;
 	}
@@ -75,7 +72,6 @@ public class Account {
 		this.email = email;
 	}
 
-	@NotNull
 	@Column(name = "name")
 	public String getName() {
 		return name;
@@ -85,7 +81,6 @@ public class Account {
 		this.name = name;
 	}
 
-	@NotNull
 	@Column(name = "password")
 	public String getPassword() {
 		return password;
