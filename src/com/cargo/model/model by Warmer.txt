@@ -1,0 +1,11 @@
+above all: change some java sources' file
+to Wealong: you should pick some and del some
+
+comment:
+1.customer: cmid(email),name,passwd,phone,gender ——none of them is null
+2.shop:shopid(email),name,passwd,manager,phone,address,picture ——none of them is null 
+3.car:carid,owner,picture,ctype(new,used),brand,model,price,description,stock ——none of them is null
+4.collection:cmid,carid ——none of them is null
+5.order:cmid,carid,book_time,result(booking,booked,checked,bought,cancel) ——none of them is null
+6.comment:cmid,carid,time,description,picture ——picture can be null
+7.advertisement:shopid,picture,description ——description can be null

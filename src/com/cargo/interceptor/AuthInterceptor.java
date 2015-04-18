@@ -36,16 +36,16 @@ public class AuthInterceptor implements HandlerInterceptor{
 		String encrypt = request.getHeader("Authorization");
 		
 		if(encrypt == null){
-			System.out.println("AuthToken不能为空！");
+			System.out.println("AuthToken涓嶈兘涓虹┖锛�");
 		}
 		String token = Encrypter.decode(encrypt);
 		System.out.println(token);
 		String[] tokens = token.split(" ");
 		Account account = dao.findByName(tokens[0]);
 		if(account!=null&&account.getAuth_token().equals(encrypt))
-			System.out.println("你成功登录");
+			System.out.println("浣犳垚鍔熺櫥褰�");
 		else 
-			System.out.println("你尚未登录");
+			System.out.println("浣犲皻鏈櫥褰�");
 		return true;
 	}
 
