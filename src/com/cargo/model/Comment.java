@@ -40,7 +40,7 @@ public class Comment {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="cmid")
+	@JoinColumn(name="carid")
 	public Car getCarid() {
 		return carid;
 	}

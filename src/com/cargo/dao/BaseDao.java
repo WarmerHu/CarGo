@@ -42,10 +42,9 @@ public class BaseDao<T> implements IBaseDao<T> {
 	}
 
 	@Override
-	public T update(T entity) {
+	public void update(T entity) {
 		Preconditions.checkNotNull(entity);
-        getCurrentSession().update(entity);
-        return entity;
+        getCurrentSession().merge(entity);
 	}
 
 	@Override

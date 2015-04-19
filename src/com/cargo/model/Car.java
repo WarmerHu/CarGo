@@ -13,9 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import net.minidev.json.JSONObject;
+
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name="car")
@@ -32,6 +32,7 @@ public class Car{
 	private String brand;
 	private String model;
 	private CarType ctype;
+	private Account owner;
 	private String description;
 	private String price;
 	
@@ -43,6 +44,14 @@ public class Car{
 	}
 	public void setCarid(Long carid) {
 		this.carid = carid;
+	}
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	public Account getOwner() {
+		return owner;
+	}
+	public void setOwner(Account owner) {
+		this.owner = owner;
 	}
 	
 	@Column(name="stock")
@@ -114,10 +123,14 @@ public class Car{
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
 		obj.put("carid", carid);
-		obj.put("shopid", shopid.toJSON());
+		if(shopid != null){
+			obj.put("shopid", shopid.toJSON());
+		}
 		obj.put("description", description);
 		obj.put("picture", picture);
-		obj.put("ctype", getCtype().toString());
+		if(getCtype() != null){
+			obj.put("ctype", getCtype().toString());
+		}
 		obj.put("brand", brand);
 		obj.put("model", model);
 		obj.put("price", price);
@@ -126,64 +139,3 @@ public class Car{
 	}
 
 }
-
-//@Entity
-//@DynamicUpdate(true)
-//public class Car {
-//	
-//	private Long id;
-//	private Account owner;
-//	private CarType type;
-//	private String description;
-//	private String price;
-//	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	public Long getId() {
-//		return id;
-//	}
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
-//	
-//	@OneToOne(cascade = CascadeType.ALL)
-//	public Account getowner() {
-//		return owner;
-//	}
-//	public void setowner(Account owner) {
-//		this.shopid = owner;
-//	}
-//	
-//	@OneToOne(cascade = CascadeType.ALL)
-//	public CarType getType() {
-//		return type;
-//	}
-//	public void setType(CarType type) {
-//		this.type = type;
-//	}
-//	
-//	@Column(name="description")
-//	public String getDescription() {
-//		return description;
-//	}
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
-//	
-//	@Column(name="price")
-//	public String getPrice() {
-//		return price;
-//	}
-//	public void setPrice(String price) {
-//		this.price = price;
-//	}
-//	public JSONObject toJSON() {
-//		JSONObject obj = new JSONObject();
-//		obj.put("id", id);
-//		obj.put("owner", owner.toJSON());
-//		obj.put("description", description);
-//		obj.put("price", price);
-//		return obj;
-//	}
-//
-//}

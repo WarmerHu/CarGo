@@ -19,7 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Assert;
 
@@ -77,23 +76,21 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBody))
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.id").exists())
+				.andExpect(jsonPath("$.carid").exists())
 				.andExpect(jsonPath("$.description").value("good car"))
 				.andExpect(jsonPath("$.price").value("$8000"))
-				.andExpect(jsonPath("$.owner.id").exists())
 				.andReturn();
 	}
 	
 	@Test
 	public void gets() throws Exception{
 		Car car = dao.first();
-		mocMvc.perform(get("/accounts/{account_id}/cars/{id}",car.getOwner().getId(),car.getId())
+		mocMvc.perform(get("/accounts/{account_id}/cars/{id}",car.getOwner().getId(),car.getCarid())
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").exists())
+				.andExpect(jsonPath("$.carid").exists())
 				.andExpect(jsonPath("$.description").value(car.getDescription()))
 				.andExpect(jsonPath("$.price").value(car.getPrice()))
-				.andExpect(jsonPath("$.owner.id").exists())
 				.andReturn();
 	}
 	
@@ -101,14 +98,13 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	public void update() throws Exception{
 		Car car = dao.first();
 		String content = "{\"price\":\"$7000\" }";
-		mocMvc.perform(patch("/accounts/{account_id}/cars/{id}",car.getOwner().getId(),car.getId())
+		mocMvc.perform(patch("/accounts/{account_id}/cars/{id}",car.getOwner().getId(),car.getCarid())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(content))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.price").value("$7000"))
-				.andExpect(jsonPath("$.id").exists())
+				.andExpect(jsonPath("$.carid").exists())
 				.andExpect(jsonPath("$.description").value(car.getDescription()))
-				.andExpect(jsonPath("$.owner.id").exists())
 				.andReturn();
 	}
 	
@@ -125,11 +121,11 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	public void deletes() throws Exception{
 		List<Car> cars = dao.findAll();
 		Car car = cars.get(cars.size() - 1);
-		mocMvc.perform(delete("/accounts/{id}/cars/{id}",car.getOwner().getId(), car.getId())
+		mocMvc.perform(delete("/accounts/{id}/cars/{id}",car.getOwner().getId(), car.getCarid())
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent())
 				.andReturn();
-		Assert.isNull(dao.find(car.getId()));
+		Assert.isNull(dao.find(car.getCarid()));
 	}
 	
 	@After

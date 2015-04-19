@@ -51,12 +51,7 @@ public class CarController {
 	
 	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.PATCH)
 	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long account_id,@PathVariable Long id){
-		Car old = dao.find(id);
-		if(car.getDescription() == null) car.setDescription(old.getDescription());
-		if(car.getPrice() == null) car.setPrice(old.getPrice());
-		if(car.getOwner() == null) car.setOwner(old.getOwner());
-		if(car.getType() == null) car.setType(old.getType());
-		car.setId(id);
+		car.setCarid(id);
 		dao.update(car);
 		return dao.find(id).toJSON();
 	}

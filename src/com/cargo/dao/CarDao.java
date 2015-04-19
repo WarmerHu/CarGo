@@ -12,4 +12,13 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 		setClazz(Car.class);
 	}
 	
+	@Override
+	public void update(Car car) {
+		Car old = find(car.getCarid());
+		if(car.getDescription() == null) car.setDescription(old.getDescription());
+		if(car.getPrice() == null) car.setPrice(old.getPrice());
+		if(car.getCtype() == null) car.setCtype(old.getCtype());
+		super.update(car);
+	}
+	
 }
