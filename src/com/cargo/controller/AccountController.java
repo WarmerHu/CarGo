@@ -20,7 +20,7 @@ import com.cargo.model.Account;
 import com.cargo.model.Account.ProfileType;
 import com.cargo.util.Encrypter;
 
-
+//test
 @Controller
 public class AccountController {
 	
