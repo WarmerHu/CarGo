@@ -26,6 +26,7 @@ public class Collection{
 
 @Embeddable
 class CollectionPK implements Serializable{
+	private static final long serialVersionUID = -2851526712831154573L;
 	private Customer cmid;
 	private Car carid;
 	

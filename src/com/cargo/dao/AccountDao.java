@@ -1,9 +1,8 @@
 package com.cargo.dao;
 
 import org.springframework.stereotype.Repository;
-import com.cargo.dao.BaseDao;
+
 import com.cargo.model.Account;
-import com.cargo.model.Car;
 
 
 @Repository

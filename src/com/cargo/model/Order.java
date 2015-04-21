@@ -37,6 +37,9 @@ public class Order{
 
 @Embeddable
 class OrderPK implements Serializable{
+	
+	private static final long serialVersionUID = -1290594708094592925L;
+
 	public enum Result{
 		Booking,Booked,Checked,Bought,Cancel
 	};

@@ -15,11 +15,8 @@ import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 @Entity
 @Table(name="car")
-@DynamicUpdate(true)
 public class Car{
 	
 	public enum CarType{
