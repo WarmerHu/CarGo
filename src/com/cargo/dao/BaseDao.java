@@ -29,11 +29,16 @@ public class BaseDao<T> implements IBaseDao<T> {
 		return (T) getCurrentSession().get(clazz, id);
 	}
 
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<T> findAll() {
 		return getCurrentSession().createQuery("from " + clazz.getName()).list();
 	}
+	
+//	public List<T> find(T t){
+//		return null;
+//	}
 
 	@Override
 	public T create(T entity) {
@@ -59,6 +64,13 @@ public class BaseDao<T> implements IBaseDao<T> {
         Preconditions.checkState(entity != null);
         delete(entity);
 	}
+	
+//	@Override
+//	public void deleteById(String id) {
+//		final T entity = find(id);
+//        Preconditions.checkState(entity != null);
+//        delete(entity);
+//	}
 
 	@Override
 	public void deleteAll() {

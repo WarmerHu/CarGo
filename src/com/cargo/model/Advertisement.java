@@ -1,7 +1,12 @@
 package com.cargo.model;
 
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,13 +14,27 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import net.minidev.json.JSONObject;
+
 @Entity
 @Table(name="advertisement")
 public class Advertisement {
+	
+	public enum ADState{
+		Apply, Revoke, Fail, Approval, Expired
+	}
+	
+	public enum Position{
+		Home, Top, Side
+	}
+	
 	private Long id;
-	private Shop shopid;
 	private String picture;
-	private String description;
+	private String link;
+	private Date length;
+	private ADState adstate;
+	private Position position;
+	private Account owner;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,16 +45,7 @@ public class Advertisement {
 		this.id = id;
 	}
 	
-	@ManyToOne
-	@JoinColumn(name="shopid")
-	public Shop getShopid() {
-		return shopid;
-	}
-	public void setShopid(Shop shopid) {
-		this.shopid = shopid;
-	}
-	
-	@Column(name="picture")
+	@Column(name="picture",nullable=false)
 	public String getPicture() {
 		return picture;
 	}
@@ -43,13 +53,59 @@ public class Advertisement {
 		this.picture = picture;
 	}
 	
-	@Column(name="description")
-	public String getDescription() {
-		return description;
+	@Column(name="link")
+	public String getLink() {
+		return link;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setLink(String link) {
+		this.link = link;
 	}
 	
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="adstate",nullable=false)
+	public ADState getAdstate() {
+		return adstate;
+	}
+	public void setAdstate(ADState adstate) {
+		this.adstate = adstate;
+	}
+	
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="position",nullable=false,columnDefinition="int default 0")
+	public Position getPosition() {
+		return position;
+	}
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	
+	@ManyToOne(cascade=CascadeType.ALL,optional=true)
+	@JoinColumn(name="owner",nullable=false)
+	public Account getOwner() {
+		return owner;
+	}
+	public void setOwner(Account owner) {
+		this.owner = owner;
+	}
+	
+	public Date getLength() {
+		return length;
+	}
+	public void setLength(Date length) {
+		this.length = length;
+	}
+	
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("picture", picture);
+		obj.put("link", link);
+		obj.put("length", length);
+		obj.put("adstate", getAdstate().toString());
+		obj.put("position", getPosition().toString());
+		obj.put("owner", owner.toJSON());
+		return obj;
+	}
+
 	
 }

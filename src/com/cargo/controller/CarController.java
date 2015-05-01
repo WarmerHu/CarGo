@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
 import com.cargo.model.Car;
+import com.cargo.model.Selection;
 
 @Controller
 public class CarController {
@@ -33,14 +34,21 @@ public class CarController {
 		return dao.create(car).toJSON();
 	}
 	
+	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.GET)
+	public @ResponseBody List<Car> list(){
+		return dao.findAll();
+	}
+	
 	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return dao.find(id).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.GET)
-	public @ResponseBody List<Car> list(){
-		return dao.findAll();
+	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.PATCH)
+	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long account_id,@PathVariable Long id){
+		car.setId(id);
+		dao.update(car);
+		return dao.find(id).toJSON();
 	}
 	
 	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.DELETE)
@@ -49,10 +57,12 @@ public class CarController {
 		dao.deleteById(id);
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.PATCH)
-	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long account_id,@PathVariable Long id){
-		car.setCarid(id);
-		dao.update(car);
-		return dao.find(id).toJSON();
+	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.POST)
+	public @ResponseBody List<Car> search(@RequestBody Selection selection){
+		return dao.findBySelection(selection);
 	}
+	
+
+	
+
 }

@@ -3,14 +3,11 @@ package com.cargo.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
@@ -20,30 +17,29 @@ import net.minidev.json.JSONObject;
 public class Car{
 	
 	public enum CarType{
-		New,Used
+		New, Used
 	}
-	private Long carid;
+	private Long id;
 	private Long stock;
-	private Shop shopid;
 	private String picture;
 	private String brand;
 	private String model;
-	private CarType ctype;
+	private CarType type;
 	private Account owner;
 	private String description;
 	private String price;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="carid")
-	public Long getCarid() {
-		return carid;
+	public Long getId() {
+		return id;
 	}
-	public void setCarid(Long carid) {
-		this.carid = carid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL,optional=true)
+	@JoinColumn(name="owner",nullable=false)
 	public Account getOwner() {
 		return owner;
 	}
@@ -51,7 +47,7 @@ public class Car{
 		this.owner = owner;
 	}
 	
-	@Column(name="stock")
+	@Column(name="stock",nullable=false)
 	public Long getStock() {
 		return stock;
 	}
@@ -59,16 +55,14 @@ public class Car{
 		this.stock = stock;
 	}
 	
-	@ManyToOne
-	@JoinColumn(name="shopid")
-	public Shop getshopid() {
-		return shopid;
+	@Column(name="carType",nullable=false)
+	public CarType getType() {
+		return type;
 	}
-	public void setshopid(Shop shopid) {
-		this.shopid = shopid;
+	public void setType(CarType type) {
+		this.type = type;
 	}
-	
-	@Column(name="picture")
+	@Column(name="picture",nullable=false)
 	public String getPicture() {
 		return picture;
 	}
@@ -76,7 +70,7 @@ public class Car{
 		this.picture = picture;
 	}
 	
-	@Column(name="brand")
+	@Column(name="brand",nullable=false)
 	public String getBrand() {
 		return brand;
 	}
@@ -84,21 +78,12 @@ public class Car{
 		this.brand = brand;
 	}
 	
-	@Column(name="model")
+	@Column(name="model",nullable=false)
 	public String getModel() {
 		return model;
 	}
 	public void setModel(String model) {
 		this.model = model;
-	}
-	
-	@Column(name="ctype")
-	@Enumerated(EnumType.ORDINAL)
-	public CarType getCtype() {
-		return ctype;
-	}
-	public void setCtype(CarType ctype) {
-		this.ctype = ctype;
 	}
 	
 	@Column(name="description")
@@ -119,19 +104,15 @@ public class Car{
 	
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
-		obj.put("carid", carid);
-		if(shopid != null){
-			obj.put("shopid", shopid.toJSON());
-		}
+		obj.put("id", id);
 		obj.put("description", description);
 		obj.put("picture", picture);
-		if(getCtype() != null){
-			obj.put("ctype", getCtype().toString());
-		}
+		obj.put("type", getType().toString());
 		obj.put("brand", brand);
 		obj.put("model", model);
 		obj.put("price", price);
 		obj.put("stock", stock);
+		obj.put("owner", owner.toJSON());
 		return obj;
 	}
 

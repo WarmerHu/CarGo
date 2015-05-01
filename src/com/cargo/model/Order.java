@@ -43,7 +43,7 @@ class OrderPK implements Serializable{
 	public enum Result{
 		Booking,Booked,Checked,Bought,Cancel
 	};
-	private Customer cmid;
+	private Account owner;
 	private Car carid;
 	private Result result;
 	
@@ -55,12 +55,12 @@ class OrderPK implements Serializable{
 		this.result = result;
 	}
 	@ManyToOne
-	@JoinColumn(name="cmid")
-	public Customer getCmid() {
-		return cmid;
+	@JoinColumn(name="owner")
+	public Account getOwner() {
+		return owner;
 	}
-	public void setCmid(Customer cmid) {
-		this.cmid = cmid;
+	public void setOwner(Account Owner) {
+		this.owner = owner;
 	}
 	
 	@ManyToOne
@@ -76,7 +76,7 @@ class OrderPK implements Serializable{
     public boolean equals(Object obj) { 
         if(obj instanceof OrderPK){ 
         	OrderPK pk=(OrderPK)obj; 
-            if(this.cmid.equals(pk.cmid) && this.carid.equals(pk.carid) && this.result.equals(pk.result)){ 
+            if(this.owner.equals(pk.owner) && this.carid.equals(pk.carid) && this.result.equals(pk.result)){ 
                 return true; 
             } 
         } 

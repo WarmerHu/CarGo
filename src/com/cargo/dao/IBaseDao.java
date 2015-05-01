@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface IBaseDao<T> {
 	public T find(final long id);
+	
+//	public List<T> find(T t);
 
     public List<T> findAll();
 
@@ -14,6 +16,8 @@ public interface IBaseDao<T> {
     public void delete(final T entity);
 
     public void deleteById(final long id);
+    
+//    public void deleteById(final String id);
     
     public void deleteAll();
     

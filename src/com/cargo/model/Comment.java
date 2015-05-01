@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name="commment")
 public class Comment {
 	private Long id;
-	private Customer cmid;
+	private Account owner;
 	private Car carid;
 	private Date time;
 	private String description;
@@ -31,12 +31,12 @@ public class Comment {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="cmid")
-	public Customer getCmid() {
-		return cmid;
+	@JoinColumn(name="owner")
+	public Account getOwner() {
+		return owner;
 	}
-	public void setCmid(Customer cmid) {
-		this.cmid = cmid;
+	public void setOwner(Account owner) {
+		this.owner = owner;
 	}
 	
 	@ManyToOne

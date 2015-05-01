@@ -13,5 +13,4 @@ public class CollectionDao extends BaseDao<Collection> implements ICollectionDao
 		setClazz(Collection.class);
 	}
 	
-	
 }

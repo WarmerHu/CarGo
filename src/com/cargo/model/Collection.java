@@ -27,16 +27,16 @@ public class Collection{
 @Embeddable
 class CollectionPK implements Serializable{
 	private static final long serialVersionUID = -2851526712831154573L;
-	private Customer cmid;
+	private Account id;
 	private Car carid;
 	
 	@ManyToOne
-	@JoinColumn(name="cmid")
-	public Customer getCmid() {
-		return cmid;
+	@JoinColumn(name="id")
+	public Account getId() {
+		return id;
 	}
-	public void setCmid(Customer cmid) {
-		this.cmid = cmid;
+	public void setId(Account id) {
+		this.id = id;
 	}
 	
 	@ManyToOne
@@ -52,7 +52,7 @@ class CollectionPK implements Serializable{
     public boolean equals(Object obj) { 
         if(obj instanceof CollectionPK){ 
         	CollectionPK pk=(CollectionPK)obj; 
-            if(this.cmid.equals(pk.cmid)&&this.carid.equals(pk.carid)){ 
+            if(this.id.equals(pk.id) && this.carid.equals(pk.carid)){ 
                 return true; 
             } 
         } 
