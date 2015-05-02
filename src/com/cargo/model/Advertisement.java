@@ -1,6 +1,5 @@
 package com.cargo.model;
 
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +30,7 @@ public class Advertisement {
 	private Long id;
 	private String picture;
 	private String link;
-	private Date length;
+	private String length;
 	private ADState adstate;
 	private Position position;
 	private Account owner;
@@ -88,10 +87,10 @@ public class Advertisement {
 		this.owner = owner;
 	}
 	
-	public Date getLength() {
+	public String getLength() {
 		return length;
 	}
-	public void setLength(Date length) {
+	public void setLength(String length) {
 		this.length = length;
 	}
 	

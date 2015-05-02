@@ -1,6 +1,5 @@
 package com.cargo.controller;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import net.minidev.json.JSONObject;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.cargo.dao.IAccountDao;
 import com.cargo.dao.IAdvertisementDao;
-import com.cargo.model.Account;
 import com.cargo.model.Advertisement;
 import com.cargo.model.Advertisement.ADState;
 import com.cargo.model.Advertisement.Position;
@@ -26,10 +25,13 @@ public class AdvertisementController {
 	
 	@Autowired
 	private IAdvertisementDao adDao;
+	@Autowired
+	private IAccountDao accountDao;
 
 	@RequestMapping(value="/accounts/{account_id}/ads",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public @ResponseBody JSONObject create(@RequestBody Advertisement ad,@RequestBody JSONObject obj){
+	public @ResponseBody JSONObject create(@RequestBody Advertisement ad,@PathVariable Long account_id,@RequestBody JSONObject obj){
+		ad.setOwner(accountDao.find(account_id));
 		ad.setAdstate(ADState.valueOf((String) obj.get("adstate")));
 		ad.setPosition(Position.valueOf((String) obj.get("position")));
 		return adDao.create(ad).toJSON();
@@ -53,7 +55,7 @@ public class AdvertisementController {
 		return adDao.findAll();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/ads/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/accounts/ads/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return adDao.find(id).toJSON();
 	}

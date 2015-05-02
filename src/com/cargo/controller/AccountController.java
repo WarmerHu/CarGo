@@ -21,6 +21,7 @@ import com.cargo.model.Account.Gender;
 import com.cargo.model.Account.ProfileType;
 import com.cargo.util.Encrypter;
 
+//test
 @Controller
 public class AccountController {
 	

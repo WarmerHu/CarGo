@@ -1,9 +1,6 @@
 package com.cargo.model;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,7 +8,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
@@ -38,8 +34,8 @@ public class Account {
 	private String email;
 	private String address;
 	private String city;
-	private List<Car> car=new ArrayList<Car>();
-	private List<Advertisement> ad=new ArrayList<Advertisement>();
+//	private List<Car> car=new ArrayList<Car>();
+//	private List<Advertisement> ad=new ArrayList<Advertisement>();
 	
 	@Column(name = "address")
 	public String getAddress() {
@@ -135,23 +131,23 @@ public class Account {
 		this.auth_token = auth_token;
 	}
 
-	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
-	public List<Car> getCar() {
-		return car;
-	}
+//	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
+//	public List<Car> getCar() {
+//		return car;
+//	}
+//
+//	public void setCar(List<Car> car) {
+//		this.car = car;
+//	}
 
-	public void setCar(List<Car> car) {
-		this.car = car;
-	}
-
-	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
-	public List<Advertisement> getAd() {
-		return ad;
-	}
-
-	public void setAd(List<Advertisement> ad) {
-		this.ad = ad;
-	}
+//	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
+//	public List<Advertisement> getAd() {
+//		return ad;
+//	}
+//
+//	public void setAd(List<Advertisement> ad) {
+//		this.ad = ad;
+//	}
 
 	public JSONObject toJSON(){
 		JSONObject obj = new JSONObject();

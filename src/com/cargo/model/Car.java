@@ -1,8 +1,9 @@
 package com.cargo.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,14 +21,15 @@ public class Car{
 		New, Used
 	}
 	private Long id;
-	private Long stock;
+	private int stock;
 	private String picture;
 	private String brand;
 	private String model;
 	private CarType type;
 	private Account owner;
 	private String description;
-	private String price;
+	private int price;
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,7 +40,7 @@ public class Car{
 		this.id = id;
 	}
 	
-	@ManyToOne(cascade=CascadeType.ALL,optional=true)
+	@ManyToOne(optional=true)
 	@JoinColumn(name="owner",nullable=false)
 	public Account getOwner() {
 		return owner;
@@ -47,14 +49,15 @@ public class Car{
 		this.owner = owner;
 	}
 	
-	@Column(name="stock",nullable=false)
-	public Long getStock() {
+	@Column(name="stock",nullable=false,columnDefinition="int default 0")
+	public int getStock() {
 		return stock;
 	}
-	public void setStock(Long stock) {
+	public void setStock(int stock) {
 		this.stock = stock;
 	}
 	
+	@Enumerated(EnumType.ORDINAL)
 	@Column(name="carType",nullable=false)
 	public CarType getType() {
 		return type;
@@ -94,11 +97,11 @@ public class Car{
 		this.description = description;
 	}
 	
-	@Column(name="price")
-	public String getPrice() {
+	@Column(name="price",columnDefinition="int default 0")
+	public int getPrice() {
 		return price;
 	}
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	

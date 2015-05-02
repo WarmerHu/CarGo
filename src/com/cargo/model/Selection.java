@@ -2,8 +2,12 @@ package com.cargo.model;
 
 
 public class Selection {
+	
+	public enum CarType{
+		New, Used
+	}
 	private String keyword;
-	private String type;
+	private CarType type;
 	private String brand;
 	private String model;
 	private String city;
@@ -28,12 +32,6 @@ public class Selection {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public String getBrand() {
 		return brand;
 	}
@@ -57,6 +55,12 @@ public class Selection {
 	}
 	public void setSuppliers(String suppliers) {
 		this.suppliers = suppliers;
+	}
+	public CarType getType() {
+		return type;
+	}
+	public void setType(CarType type) {
+		this.type = type;
 	}
 	
 	

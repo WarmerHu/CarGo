@@ -25,13 +25,13 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 	public void update(Car car) {
 		Car old = find(car.getId());
 		car.setOwner(old.getOwner());
-		if(car.getStock() == null) car.setStock(old.getStock());
+		if(car.getStock() == 0) car.setStock(old.getStock());
 		if(car.getPicture() == null) car.setPicture(old.getPicture());
 		if(car.getBrand() == null) car.setBrand(old.getBrand());
 		if(car.getModel() == null) car.setModel(old.getModel());
 		if(car.getType() == null) car.setType(old.getType());
 		if(car.getDescription() == null) car.setDescription(old.getDescription());
-		if(car.getPrice() == null) car.setPrice(old.getPrice());
+		if(car.getPrice() == 0) car.setPrice(old.getPrice());
 		super.update(car);
 	}
 	

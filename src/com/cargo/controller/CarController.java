@@ -19,6 +19,8 @@ import com.cargo.dao.ICarDao;
 import com.cargo.model.Car;
 import com.cargo.model.Selection;
 
+
+//test
 @Controller
 public class CarController {
 	
@@ -34,12 +36,12 @@ public class CarController {
 		return dao.create(car).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.GET)
+	@RequestMapping(value="/accounts/cars",method=RequestMethod.GET)
 	public @ResponseBody List<Car> list(){
 		return dao.findAll();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/accounts/cars/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return dao.find(id).toJSON();
 	}
@@ -57,7 +59,7 @@ public class CarController {
 		dao.deleteById(id);
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.POST)
+	@RequestMapping(value="/cars",method=RequestMethod.POST)
 	public @ResponseBody List<Car> search(@RequestBody Selection selection){
 		return dao.findBySelection(selection);
 	}
