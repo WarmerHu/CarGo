@@ -59,7 +59,7 @@ class OrderPK implements Serializable{
 	public Account getOwner() {
 		return owner;
 	}
-	public void setOwner(Account Owner) {
+	public void setOwner(Account owner) {
 		this.owner = owner;
 	}
 	

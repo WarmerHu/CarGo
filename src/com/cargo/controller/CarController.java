@@ -36,24 +36,24 @@ public class CarController {
 		return dao.create(car).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/cars",method=RequestMethod.GET)
+	@RequestMapping(value="/cars",method=RequestMethod.GET)
 	public @ResponseBody List<Car> list(){
 		return dao.findAll();
 	}
 	
-	@RequestMapping(value="/accounts/cars/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/cars/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return dao.find(id).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.PATCH)
-	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long account_id,@PathVariable Long id){
+	@RequestMapping(value="/cars/{id}",method=RequestMethod.PATCH)
+	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long id){
 		car.setId(id);
 		dao.update(car);
 		return dao.find(id).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/cars/{id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public @ResponseBody void delete(@PathVariable Long id){
 		dao.deleteById(id);

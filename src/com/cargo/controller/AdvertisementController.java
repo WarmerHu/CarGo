@@ -43,19 +43,19 @@ public class AdvertisementController {
 //		adDao.deleteById(id);
 //	}
 	
-	@RequestMapping(value="/accounts/{account_id}/ads/{id}",method=RequestMethod.PATCH)
+	@RequestMapping(value="/ads/{id}",method=RequestMethod.PATCH)
 	public @ResponseBody JSONObject patch(@RequestBody Advertisement ad,@PathVariable Long id){
 		ad.setId(id);
 		adDao.update(ad);
 		return adDao.find(ad.getId()).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/ads",method=RequestMethod.GET)
+	@RequestMapping(value="/ads",method=RequestMethod.GET)
 	public @ResponseBody List<Advertisement> list(){
 		return adDao.findAll();
 	}
 	
-	@RequestMapping(value="/accounts/ads/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/ads/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return adDao.find(id).toJSON();
 	}

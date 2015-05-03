@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
-import com.cargo.model.Account.Gender;
-import com.cargo.model.Account.ProfileType;
 import com.cargo.util.Encrypter;
 
-//test
 @Controller
 public class AccountController {
 	
@@ -30,9 +28,7 @@ public class AccountController {
 
 	@RequestMapping(value="/accounts",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public @ResponseBody JSONObject create(@RequestBody Account account,@RequestBody JSONObject obj){
-		account.setGender(Gender.valueOf((String) obj.get("gender")));
-		account.setType(ProfileType.valueOf((String) obj.get("type")));
+	public @ResponseBody JSONObject create(@RequestBody Account account){
 		return accountDao.create(account).toJSON();
 	}
 	
@@ -52,7 +48,7 @@ public class AccountController {
 	}
 	
 	@RequestMapping(value="/accounts",method=RequestMethod.GET)
-	public @ResponseBody List<Account> list(){
+	public @ResponseBody List<Account> list(WebRequest request){
 		return accountDao.findAll();
 	}
 	
@@ -73,9 +69,5 @@ public class AccountController {
 	public @ResponseBody void delete(@PathVariable Long id){
 		accountDao.deleteById(id);
 	}
-	
-	
-	
-	
 	
 }
