@@ -1,8 +1,11 @@
 package com.cargo.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.cargo.model.Account;
+import com.cargo.model.Order;
 
 
 @Repository
@@ -30,6 +33,15 @@ public class AccountDao extends BaseDao<Account> implements IAccountDao {
 		if(account.getCity() == null) account.setCity(old.getCity());
 		if(account.getType() == null) account.setType(old.getType());
 		super.update(account);
+	}
+
+	@Override
+	public List<Order> getOrders(Long id) {
+		@SuppressWarnings("unchecked")
+		List<Order> list = getCurrentSession().createQuery("from Order as o where o.buyer = ?")
+						.setEntity(0, find(id))
+						.list();
+		return list;
 	}
 	
 }

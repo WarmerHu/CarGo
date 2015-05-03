@@ -160,10 +160,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		for(Account account : dao.findAll()){
-			if(account.getName() == null || account.getName().equals("testa1"))
-				dao.delete(account);
-		}
+		dao.deleteAll();
 	}
 
 	

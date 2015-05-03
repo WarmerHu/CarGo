@@ -3,6 +3,7 @@ package com.cargo.controller;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class AccountController {
 	
 	
 	@RequestMapping(value="/accounts/login",method=RequestMethod.POST)
-	public @ResponseBody Account login(@RequestBody Account a) throws NoSuchAlgorithmException{
+	public @ResponseBody JSONObject login(@RequestBody Account a) throws NoSuchAlgorithmException{
 		Account account = accountDao.findByName(a.getName());
 		System.out.println(account);
 		if (account != null && account.getPassword().equals(a.getPassword())){
@@ -44,12 +45,19 @@ public class AccountController {
 		} else {
 			account = null;
 		}
-		return account;
+		JSONObject obj = account.toJSON();
+		obj.put("auth_token", account.getAuth_token());
+		return obj;
 	}
 	
 	@RequestMapping(value="/accounts",method=RequestMethod.GET)
-	public @ResponseBody List<Account> list(WebRequest request){
-		return accountDao.findAll();
+	public @ResponseBody JSONArray list(WebRequest request){
+		JSONArray array = new JSONArray();
+		List<Account> as = accountDao.findAll();
+		for(Account a : as){
+			array.add(a.toJSON());
+		}
+		return array;
 	}
 	
 	@RequestMapping(value="/accounts/{id}",method=RequestMethod.GET)

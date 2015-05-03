@@ -178,9 +178,9 @@ public class Account {
 		obj.put("city", city);
 		obj.put("telephone", telephone);
 		if(getGender() != null){
-			obj.put("gender", getGender().toString());
+			obj.put("gender", getGender().name());
 		}
-		obj.put("type", getType().toString());
+		obj.put("type", getType().name());
 		return obj;
 	}
 }

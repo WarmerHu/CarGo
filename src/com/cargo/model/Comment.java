@@ -1,5 +1,6 @@
 package com.cargo.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,15 +12,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import net.minidev.json.JSONObject;
+
 @Entity
-@Table(name="commment")
+@Table(name="comment")
 public class Comment {
 	private Long id;
 	private Account owner;
-	private Car carid;
+	private Car car;
 	private Date time;
-	private String description;
-	private String picture;
+	private String content;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +33,7 @@ public class Comment {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="owner")
+	@JoinColumn(name="ownerid")
 	public Account getOwner() {
 		return owner;
 	}
@@ -41,11 +43,11 @@ public class Comment {
 	
 	@ManyToOne
 	@JoinColumn(name="carid")
-	public Car getCarid() {
-		return carid;
+	public Car getCar() {
+		return car;
 	}
-	public void setCarid(Car carid) {
-		this.carid = carid;
+	public void setCar(Car car) {
+		this.car = car;
 	}
 	
 	@Column(name="time")
@@ -56,20 +58,21 @@ public class Comment {
 		this.time = time;
 	}
 	
-	@Column(name="description")
-	public String getDescription() {
-		return description;
+	@Column(name="content")
+	public String getContent() {
+		return content;
 	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	@Column(name="picture")
-	public String getPicture() {
-		return picture;
-	}
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
+	public JSONObject toJSON(){
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("account_id", owner.getId());
+		obj.put("account", owner.getName());
+		obj.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
+		obj.put("content", content);
+		return obj;
+	}
 }

@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.cargo.model.Car;
+import com.cargo.model.Order;
 import com.cargo.model.Selection;
 
 @Repository
@@ -74,6 +75,16 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 						criterion
 						)
 				).list();
+	}
+
+
+	@Override
+	public List<Order> getOrders(Long car_id) {
+		@SuppressWarnings("unchecked")
+		List<Order> list = getCurrentSession().createQuery("from Order as o where o.car = ?")
+						.setEntity(0, find(car_id))
+						.list();
+		return list;
 	}
 	
 }

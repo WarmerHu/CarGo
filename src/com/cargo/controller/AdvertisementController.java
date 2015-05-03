@@ -2,6 +2,7 @@ package com.cargo.controller;
 
 import java.util.List;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,13 @@ public class AdvertisementController {
 	}
 	
 	@RequestMapping(value="/ads",method=RequestMethod.GET)
-	public @ResponseBody List<Advertisement> list(){
-		return adDao.findAll();
+	public @ResponseBody JSONArray list(){
+		JSONArray array = new JSONArray();
+		List<Advertisement> ads = adDao.findAll();
+		for(Advertisement ad : ads){
+			array.add(ad.toJSON());
+		}
+		return array;
 	}
 	
 	@RequestMapping(value="/ads/{id}",method=RequestMethod.GET)

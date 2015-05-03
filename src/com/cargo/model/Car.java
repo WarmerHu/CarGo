@@ -1,17 +1,24 @@
 package com.cargo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name="car")
@@ -29,6 +36,7 @@ public class Car{
 	private Account account;
 	private String description;
 	private int price;
+	private List<Comment> Comments;
 	
 	
 	@Id
@@ -103,6 +111,15 @@ public class Car{
 	}
 	public void setPrice(int price) {
 		this.price = price;
+	}
+	
+	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy="car",fetch=FetchType.EAGER)
+	public List<Comment> getComments() {
+		return Comments;
+	}
+	public void setComments(List<Comment> comments) {
+		Comments = comments;
 	}
 	
 	@Override
