@@ -6,8 +6,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import net.minidev.json.JSONObject;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +24,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
 import com.cargo.dao.ICollectionDao;
+import com.cargo.model.Account;
+import com.cargo.model.Car;
 import com.cargo.model.Collection;
+import com.cargo.model.Account.Gender;
+import com.cargo.model.Account.ProfileType;
+import com.cargo.model.Car.CarType;
+import com.cargo.util.Encrypter;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,54 +53,119 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		
+		Account account = new Account();
+		account.setName("testa1");
+		account.setPassword("testa1");
+		account.setEmail("testa1@test.com");
+		account.setAddress("testa1");
+		account.setCity("testa1");
+		account.setGender(Gender.Lady);
+		account.setTelephone("10000000001");
+		account.setType(ProfileType.Buyer);
+		accountDao.create(account);
+		
+		Car car = new Car();
+		car.setBrand("123");
+		car.setModel("testc1");
+		car.setStock(20001);
+		car.setPicture("f://...");
+		car.setDescription("testc1");
+		car.setPrice(20001);
+		car.setType(CarType.New);
+		car.setAccount(accountDao.first());
+		carDao.create(car);
+		
+		car = new Car();
+		car.setBrand("321");
+		car.setModel("testc2");
+		car.setStock(20002);
+		car.setPicture("f://...");
+		car.setDescription("testc2");
+		car.setPrice(20002);
+		car.setType(CarType.New);
+		car.setAccount(accountDao.first());
+		carDao.create(car);
+		
 		Collection c = new Collection();
-		c.setCar(carDao.first());
+		c.setName("hello");
 		c.setOwner(accountDao.first());
+		c.addCar(car);
 		dao.create(c);
 	}
 	
 	@Test
-	public void saves() throws Exception{
-		String requestBody="{\"car_id\":\"2\"}";
-		
-		mocMvc.perform(post("/accounts/{account_id}/collections",accountDao.first().getId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(requestBody))
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.car").exists())
-				.andExpect(jsonPath("$.owner").exists())
-				.andReturn();
-	}
-	
-	
-	@Test
-	public void deletes() throws Exception{
-		mocMvc.perform(delete("/accounts/{account_id}/collections/{id}",accountDao.first().getId(),dao.first().getId())
+	public void create() throws Exception{
+		int i  = accountDao.first().getCollections().size();
+		JSONObject obj = new JSONObject();
+		obj.put("name","hello2");
+		mocMvc.perform(post("/collections")
+				.content(obj.toJSONString())
+				.header("Authorization", Encrypter.encode(accountDao.first()))
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNoContent())
+				.andExpect(status().is(201))
+				.andExpect(jsonPath("$.name").value("hello2"))
 				.andReturn();
+		Assert.assertEquals(accountDao.first().getCollections().size(), i + 1);
 	}
 	
 	@Test
 	public void gets() throws Exception{
-		mocMvc.perform(get("/accounts/{account_id}/collections",accountDao.first().getId(),carDao.first().getId())
+		mocMvc.perform(get("/collections/{id}",dao.first().getId())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(200))
+				.andExpect(jsonPath("$.cars").isArray())
+				.andReturn();
+	}
+	
+	@Test
+	public void getList() throws Exception{
+		mocMvc.perform(get("/collections")
+				.header("Authorization", Encrypter.encode(accountDao.first()))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
 				.andReturn();
 	}
 	
-
+	@Test
+	public void collect() throws Exception{
+		int i = dao.first().getCars().size();
+		mocMvc.perform(post("/collections/{id}",dao.first().getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"car_id\":"+dao.first().getCars().get(0).getId().toString()+"}"))
+				.andExpect(status().is(201))
+				.andReturn();
+		Assert.assertEquals(dao.first().getCars().size(), i + 1);
+	}
 	
-
+	@Test
+	public void remove() throws Exception{
+		int i = dao.first().getCars().size();
+		mocMvc.perform(delete("/collections/{id}",dao.first().getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"car_id\":"+dao.first().getCars().get(0).getId().toString()+"}"))
+				.andExpect(status().is(204))
+				.andReturn();
+		Assert.assertEquals(dao.first().getCars().size(), i - 1);
+	}
+	
+	@Test
+	public void deletes() throws Exception{
+		int i = dao.findAll().size();
+		mocMvc.perform(delete("/collections/{id}",dao.first().getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{}"))
+				.andExpect(status().is(204))
+				.andReturn();
+		Assert.assertEquals(dao.findAll().size(), i - 1);
+	}
 	
 	@After
 	public void setdown(){
-//		for(Account account : dao.findAll()){
-//			if(account.getName() == null || account.getName().equals("testa1"))
-//				dao.delete(account);
-//				
-//		}
+		dao.deleteAll();
+		carDao.deleteAll();
+		accountDao.deleteAll();
 	}
 
 	

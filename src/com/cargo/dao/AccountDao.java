@@ -20,7 +20,7 @@ public class AccountDao extends BaseDao<Account> implements IAccountDao {
 	@Override
 	public void update(Account account) {
 		Account old = find(account.getId());
-		account.setName(old.getName());
+		if(account.getName() == null)account.setName(old.getName());
 		if(account.getEmail() == null) account.setEmail(old.getEmail());
 		if(account.getTelephone() == null) account.setTelephone(old.getTelephone());
 		if(account.getAuth_token() == null) account.setAuth_token(old.getAuth_token());

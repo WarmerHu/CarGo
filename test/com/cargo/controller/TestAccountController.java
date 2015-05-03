@@ -51,7 +51,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(accountController).build();
 		Account account = new Account();
-		account.setName("testa2");
+		account.setName("testa1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -160,10 +160,10 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-//		for(Account account : dao.findAll()){
-//			if(account.getName() == null || account.getName().equals("testa1"))
-//				dao.delete(account);
-//		}
+		for(Account account : dao.findAll()){
+			if(account.getName() == null || account.getName().equals("testa1"))
+				dao.delete(account);
+		}
 	}
 
 	

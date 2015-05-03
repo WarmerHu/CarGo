@@ -2,6 +2,7 @@ package com.cargo.controller;
 
 import java.util.List;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
 import com.cargo.model.Car;
-import com.cargo.model.Selection;
+import com.cargo.util.HttpUtil;
 
-
-//test
 @Controller
 public class CarController {
 	
@@ -29,16 +29,21 @@ public class CarController {
 	@Autowired
 	private IAccountDao accountDao;
 	
-	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.POST)
+	@RequestMapping(value="/cars",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public @ResponseBody JSONObject create(@RequestBody Car car,@PathVariable Long account_id){
-		car.setOwner(accountDao.find(account_id));
+	public @ResponseBody JSONObject create(@RequestBody Car car,WebRequest request){
+		car.setAccount(new HttpUtil(accountDao).getCurrentUser(request));
 		return dao.create(car).toJSON();
 	}
 	
 	@RequestMapping(value="/cars",method=RequestMethod.GET)
-	public @ResponseBody List<Car> list(){
-		return dao.findAll();
+	public @ResponseBody JSONArray list(){
+		JSONArray array = new JSONArray();
+		List<Car> cars = dao.findAll();
+		for(Car car : cars){
+			array.add(car.toJSON());
+		}
+		return array;
 	}
 	
 	@RequestMapping(value="/cars/{id}",method=RequestMethod.GET)
@@ -59,12 +64,9 @@ public class CarController {
 		dao.deleteById(id);
 	}
 	
-	@RequestMapping(value="/cars",method=RequestMethod.POST)
-	public @ResponseBody List<Car> search(@RequestBody Selection selection){
-		return dao.findBySelection(selection);
-	}
+//	@RequestMapping(value="/cars",method=RequestMethod.POST)
+//	public @ResponseBody List<Car> search(@RequestBody Selection selection){
+//		return dao.findBySelection(selection);
+//	}
 	
-
-	
-
 }

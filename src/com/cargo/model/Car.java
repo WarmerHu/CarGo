@@ -26,7 +26,7 @@ public class Car{
 	private String brand;
 	private String model;
 	private CarType type;
-	private Account owner;
+	private Account account;
 	private String description;
 	private int price;
 	
@@ -40,13 +40,13 @@ public class Car{
 		this.id = id;
 	}
 	
-	@ManyToOne(optional=true)
-	@JoinColumn(name="owner",nullable=false)
-	public Account getOwner() {
-		return owner;
+	@ManyToOne()
+	@JoinColumn(name="accountid",nullable=false)
+	public Account getAccount() {
+		return account;
 	}
-	public void setOwner(Account owner) {
-		this.owner = owner;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 	
 	@Column(name="stock",nullable=false,columnDefinition="int default 0")
@@ -105,6 +105,11 @@ public class Car{
 		this.price = price;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return getId().equals(((Car)obj).getId());
+	}
+	
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
 		obj.put("id", id);
@@ -115,7 +120,7 @@ public class Car{
 		obj.put("model", model);
 		obj.put("price", price);
 		obj.put("stock", stock);
-		obj.put("owner", owner.toJSON());
+		obj.put("owner", account.getId());
 		return obj;
 	}
 

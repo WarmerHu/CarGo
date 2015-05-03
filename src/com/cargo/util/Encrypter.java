@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.util.Base64Utils;
 
+import com.cargo.model.Account;
+
 public class Encrypter {
 	
 	
@@ -25,5 +27,9 @@ public class Encrypter {
 		MessageDigest md5 = MessageDigest.getInstance("MD5");  
 	    md5.update(data);  
 	    return new String(md5.digest()); 
+	}
+	
+	public static String encode(Account a){
+		return encode(a.getName() + " " + a.getPassword());
 	}
 }

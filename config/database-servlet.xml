@@ -101,12 +101,12 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
     
  	<aop:aspectj-autoproxy/>
  	
- 	<!-- 拦截器 
+ 	<!-- 拦截器 -->
 	<mvc:interceptors>
 	    <mvc:interceptor>
 	       <mvc:mapping path="/*" />
 	       <mvc:exclude-mapping path="(/accounts)|(/login/{id})"/>
 	       <bean class="com.cargo.interceptor.AuthInterceptor"></bean>
 	    </mvc:interceptor>
-	</mvc:interceptors> -->
+	</mvc:interceptors> 
 </beans>

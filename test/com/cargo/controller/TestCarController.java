@@ -17,13 +17,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Assert;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
+import com.cargo.model.Account;
 import com.cargo.model.Car;
+import com.cargo.model.Account.Gender;
+import com.cargo.model.Account.ProfileType;
 import com.cargo.model.Car.CarType;
+import com.cargo.util.Encrypter;
 
 
 /**
@@ -47,42 +52,29 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	private IAccountDao accountDao;
 	
 	public void initialDate(){
-		for(int i=1; i<=3; i++){
-			Car car = new Car();
-			car.setBrand(String.valueOf(i));
-			car.setModel("testc1");
-			car.setStock(20001);
-			car.setPicture("f://...");
-			car.setDescription("testc1");
-			car.setPrice(20001);
-			car.setType(CarType.New);
-			car.setOwner(accountDao.first());
-			dao.create(car);
-		}
-		for(int i=1; i<=3; i++){
-			Car car = new Car();
-			car.setBrand("testc1");
-			car.setModel(String.valueOf(i));
-			car.setStock(20002);
-			car.setPicture("f://...");
-			car.setDescription("testc1");
-			car.setPrice(20002);
-			car.setType(CarType.New);
-			car.setOwner(accountDao.first());
-			dao.create(car);
-		}
-		for(int i=1; i<=3; i++){
-			Car car = new Car();
-			car.setBrand("testc1");
-			car.setModel("testc1");
-			car.setStock(20003);
-			car.setPicture("f://...");
-			car.setDescription("testc"+String.valueOf(i));
-			car.setPrice(20001);
-			car.setType(CarType.Used);
-			car.setOwner(accountDao.first());
-			dao.create(car);
-		}
+		
+		Account account = new Account();
+		account.setName("testa1");
+		account.setPassword("testa1");
+		account.setEmail("testa1@test.com");
+		account.setAddress("testa1");
+		account.setCity("testa1");
+		account.setGender(Gender.Lady);
+		account.setTelephone("10000000001");
+		account.setType(ProfileType.Buyer);
+		accountDao.create(account);
+		
+		Car car = new Car();
+		car.setBrand("123");
+		car.setModel("testc1");
+		car.setStock(20001);
+		car.setPicture("f://...");
+		car.setDescription("testc1");
+		car.setPrice(20001);
+		car.setType(CarType.New);
+		car.setAccount(accountDao.first());
+		dao.create(car);
+		
 	}
 	
 	@Before
@@ -102,8 +94,9 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 							"\"stock\":20004," +
 							"\"price\":20004}";
 		
-		mocMvc.perform(post("/accounts/{account_id}/cars",accountDao.first().getId())
+		mocMvc.perform(post("/cars")
 				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", Encrypter.encode(accountDao.first()))
 				.content(requestBody))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id").exists())
@@ -120,17 +113,18 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void getList() throws Exception{
-		mocMvc.perform(get("/accounts/cars")
+		mocMvc.perform(get("/cars")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
+				.andDo(MockMvcResultHandlers.print())
 				.andReturn();
 	}
 	
 	@Test
 	public void gets() throws Exception{
 		Car car = dao.first();
-		mocMvc.perform(get("/accounts/cars/{id}",car.getId())
+		mocMvc.perform(get("/cars/{id}",car.getId())
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").exists())
@@ -149,7 +143,7 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	public void update() throws Exception{
 		Car car = dao.first();
 		String content = "{\"price\":20005}";
-		mocMvc.perform(patch("/accounts/{account_id}/cars/{id}",car.getOwner().getId(),car.getId())
+		mocMvc.perform(patch("/cars/{id}",car.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(content))
 				.andExpect(status().isOk())
@@ -168,30 +162,30 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void deletes() throws Exception{
 		Car car = dao.first();
-		mocMvc.perform(delete("/accounts/{account_id}/cars/{id}",car.getOwner().getId(), car.getId())
+		mocMvc.perform(delete("/cars/{id}", car.getId())
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent())
 				.andReturn();
 		Assert.isNull(dao.find(car.getId()));
 	}
 	
-	@Test
-	public void search() throws Exception{
-		String requestBody="{\"setKeyword\":\"1\"," +
-				"\"type\":\"Used\"," +
-				"\"hiPrice\":20001}";
-		mocMvc.perform(post("/cars")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(requestBody))
-				.andExpect(status().is(200))
-				.andExpect(jsonPath("$").isArray())
-				.andReturn();
-	}
+//	@Test
+//	public void search() throws Exception{
+//		String requestBody="{\"setKeyword\":\"1\"," +
+//				"\"type\":\"Used\"," +
+//				"\"hiPrice\":20001}";
+//		mocMvc.perform(post("/cars")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(requestBody))
+//				.andExpect(status().is(200))
+//				.andExpect(jsonPath("$").isArray())
+//				.andReturn();
+//	}
 	
 	@After
 	public void setdown(){
-//		dao.deleteAll();
-//		accountDao.deleteAll();
+		dao.deleteAll();
+		accountDao.deleteAll();
 	}
 
 	

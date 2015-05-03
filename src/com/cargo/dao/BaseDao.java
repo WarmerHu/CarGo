@@ -49,7 +49,7 @@ public class BaseDao<T> implements IBaseDao<T> {
 	@Override
 	public void update(T entity) {
 		Preconditions.checkNotNull(entity);
-        getCurrentSession().merge(entity);
+        getCurrentSession().update(entity);
 	}
 
 	@Override
@@ -64,13 +64,6 @@ public class BaseDao<T> implements IBaseDao<T> {
         Preconditions.checkState(entity != null);
         delete(entity);
 	}
-	
-//	@Override
-//	public void deleteById(String id) {
-//		final T entity = find(id);
-//        Preconditions.checkState(entity != null);
-//        delete(entity);
-//	}
 
 	@Override
 	public void deleteAll() {

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.IAdvertisementDao;
 import com.cargo.model.Advertisement;
-import com.cargo.model.Advertisement.ADState;
-import com.cargo.model.Advertisement.Position;
+import com.cargo.util.HttpUtil;
 
 @Controller
 public class AdvertisementController {
@@ -28,16 +28,14 @@ public class AdvertisementController {
 	@Autowired
 	private IAccountDao accountDao;
 
-	@RequestMapping(value="/accounts/{account_id}/ads",method=RequestMethod.POST)
+	@RequestMapping(value="/ads",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public @ResponseBody JSONObject create(@RequestBody Advertisement ad,@PathVariable Long account_id,@RequestBody JSONObject obj){
-		ad.setOwner(accountDao.find(account_id));
-		ad.setAdstate(ADState.valueOf((String) obj.get("adstate")));
-		ad.setPosition(Position.valueOf((String) obj.get("position")));
+	public @ResponseBody JSONObject create(@RequestBody Advertisement ad,WebRequest request){
+		ad.setOwner(new HttpUtil(accountDao).getCurrentUser(request));
 		return adDao.create(ad).toJSON();
 	}
 	
-//	@RequestMapping(value="/accounts/{account_id}/ads/{id}",method=RequestMethod.DELETE)
+//	@RequestMapping(value="/ads/{id}",method=RequestMethod.DELETE)
 //	@ResponseStatus(HttpStatus.NO_CONTENT)
 //	public @ResponseBody void delete(@PathVariable Long id){
 //		adDao.deleteById(id);
@@ -59,11 +57,5 @@ public class AdvertisementController {
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return adDao.find(id).toJSON();
 	}
-	
-	
-	
-	
-	
-	
 	
 }

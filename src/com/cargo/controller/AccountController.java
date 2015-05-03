@@ -38,7 +38,7 @@ public class AccountController {
 		Account account = accountDao.findByName(a.getName());
 		System.out.println(account);
 		if (account != null && account.getPassword().equals(a.getPassword())){
-			String encrypt = Encrypter.encode(a.getName() + " " + a.getPassword());
+			String encrypt = Encrypter.encode(a);
 			account.setAuth_token(encrypt);
 			accountDao.update(account);
 		} else {

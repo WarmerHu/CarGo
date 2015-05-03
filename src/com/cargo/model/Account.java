@@ -1,16 +1,25 @@
 package com.cargo.model;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name="account")
@@ -34,7 +43,8 @@ public class Account {
 	private String email;
 	private String address;
 	private String city;
-//	private List<Car> car=new ArrayList<Car>();
+	private List<Collection> collections = new ArrayList<Collection>();
+	private List<Car> cars=new ArrayList<Car>();
 //	private List<Advertisement> ad=new ArrayList<Advertisement>();
 	
 	@Column(name = "address")
@@ -66,7 +76,6 @@ public class Account {
 		this.gender = gender;
 	}
 
-//	 ProfileType.Buyer.ordinal()
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name="type",nullable=false,columnDefinition="int default 0")
 	public ProfileType getType() {
@@ -131,15 +140,25 @@ public class Account {
 		this.auth_token = auth_token;
 	}
 
-//	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
-//	public List<Car> getCar() {
-//		return car;
-//	}
-//
-//	public void setCar(List<Car> car) {
-//		this.car = car;
-//	}
+	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
+	public List<Car> getCars() {
+		return cars;
+	}
 
+	public void setCars(List<Car> cars) {
+		this.cars = cars;
+	}
+	
+	@Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy="owner",cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	public List<Collection> getCollections() {
+		return collections;
+	}
+
+	public void setCollections(List<Collection> collections) {
+		this.collections = collections;
+	}
+	
 //	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
 //	public List<Advertisement> getAd() {
 //		return ad;

@@ -24,7 +24,7 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 	@Override
 	public void update(Car car) {
 		Car old = find(car.getId());
-		car.setOwner(old.getOwner());
+		car.setAccount(old.getAccount());
 		if(car.getStock() == 0) car.setStock(old.getStock());
 		if(car.getPicture() == null) car.setPicture(old.getPicture());
 		if(car.getBrand() == null) car.setBrand(old.getBrand());
