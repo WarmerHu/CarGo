@@ -45,10 +45,13 @@ public class OrderController {
 		return dao.create(order).toJSON();
 	} 
 	
-//	@RequestMapping(value="/orders/{id}",method=RequestMethod.PATCH)
-//	public void update(@PathVariable Long id ,WebRequest request){
-//		dao.deleteById(id);
-//	}
+	@RequestMapping(value="/orders/{id}",method=RequestMethod.PATCH)
+	public @ResponseBody JSONObject update(@RequestBody JSONObject obj,@PathVariable Long id ,WebRequest request){
+		Order order = dao.find(id);
+		order.setResult(Result.valueOf((String) obj.get("result")));
+		dao.update(order);
+		return dao.find(id).toJSON();
+	}
 	
 	@RequestMapping(value="/cars/{car_id}/orders",method=RequestMethod.GET)
 	public @ResponseBody JSONArray carOrderList(@PathVariable Long car_id,WebRequest request){

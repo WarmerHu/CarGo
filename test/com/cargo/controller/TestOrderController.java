@@ -2,10 +2,13 @@ package com.cargo.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Date;
+
+import net.minidev.json.JSONObject;
 
 import org.junit.After;
 import org.junit.Before;
@@ -117,6 +120,18 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
+				.andReturn();
+	}
+	
+	@Test
+	public void update() throws Exception{
+		JSONObject obj = new JSONObject();
+		obj.put("result", "Cancel");
+		mocMvc.perform(patch("/orders/{id}",dao.first().getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(obj.toString()))
+				.andExpect(status().is(200))
+				.andExpect(jsonPath("$.result").value("Cancel"))
 				.andReturn();
 	}
 	
