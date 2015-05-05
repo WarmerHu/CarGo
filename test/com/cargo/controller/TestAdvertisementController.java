@@ -6,8 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import net.minidev.json.JSONObject;
 
 import org.junit.After;
 import org.junit.Before;
@@ -61,10 +60,10 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 		account.setType(ProfileType.Buyer);
 		accountDao.create(account);
 		
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Advertisement a = new Advertisement();
 		a.setAdstate(ADState.Approval);
-		a.setLength(df.format(new Date()));
+//		a.setLength(df.format(new Date()));
 		a.setLink(null);
 		a.setOwner(accountDao.first());
 		a.setPicture("f：//...");
@@ -74,24 +73,23 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	
 	@Test
 	public void save() throws Exception{
-		String requestBody="{\"length\":\"2016-3-3 1:1:1\"," +
-							"\"link\":\"www.baidu.com\"," +
-							"\"picture\":\"f://...\"," +
-							"\"adstate\":\"Apply\"," +
-							"\"position\":\"Top\"}";
+		
+		JSONObject obj = new JSONObject();
+		obj.put("link", "testad1");
+		obj.put("picture", "testad1://a/ad.jpg");
+		obj.put("position", "Top");
 		
 		mocMvc.perform(post("/ads")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", Encrypter.encode(accountDao.first()))
-				.content(requestBody))
+				.content(obj.toString()))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id").exists())
-				.andExpect(jsonPath("$.owner").exists())
-				.andExpect(jsonPath("$.length").value("2016-3-3 1:1:1"))
-				.andExpect(jsonPath("$.link").value("www.baidu.com"))
+//				.andExpect(jsonPath("$.length").value("2016-3-3 1:1:1"))
+				.andExpect(jsonPath("$.link").value("testad1"))
 				.andExpect(jsonPath("$.adstate").value("Apply"))
 				.andExpect(jsonPath("$.position").value("Top"))
-				.andExpect(jsonPath("$.picture").value("f://..."))
+				.andExpect(jsonPath("$.picture").value("testad1://a/ad.jpg"))
 				.andReturn();
 	}
 	
@@ -104,7 +102,6 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 				.content(content))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").exists())
-				.andExpect(jsonPath("$.owner").exists())
 				.andExpect(jsonPath("$.adstate").value("Fail"))
 				.andReturn();
 	}

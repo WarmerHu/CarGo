@@ -23,6 +23,7 @@ import com.cargo.dao.ICommentDao;
 import com.cargo.model.Comment;
 import com.cargo.util.HttpUtil;
 
+//test
 @Controller
 public class CommentController {
 	

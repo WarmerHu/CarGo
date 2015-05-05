@@ -21,6 +21,7 @@ import com.cargo.dao.IAccountDao;
 import com.cargo.model.Account;
 import com.cargo.util.Encrypter;
 
+//test
 @Controller
 public class AccountController {
 	

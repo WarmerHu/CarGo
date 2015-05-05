@@ -64,9 +64,14 @@ public class CarController {
 		dao.deleteById(id);
 	}
 	
-	@RequestMapping(value="/cars/search?keyword={keyword}&type={type}&brand={brand}&model={model}&city={city}&loprice={loprice}&hiprice={hiprice}",method=RequestMethod.GET)
-	public @ResponseBody List<Car> search(@RequestBody String keyword, @RequestBody String type, @RequestBody String brand, @RequestBody String model, @RequestBody String city, @RequestBody int loprice, @RequestBody int hiprice){
-		return dao.findByArgs(keyword,type,brand,model,loprice,hiprice);
+	@RequestMapping(value="/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
+	public @ResponseBody JSONArray list(@PathVariable String keyword, @PathVariable String type, @PathVariable String brand, @PathVariable String model, @PathVariable String city, @PathVariable String suppliers, @PathVariable String loprice, @PathVariable String hiprice){
+		JSONArray array = new JSONArray();
+		List<Car> cars = dao.findByArgs(keyword,type,brand,model,city, suppliers, loprice,hiprice);
+		for(Car car : cars){
+			array.add(car.toJSON());
+		}
+		return array;
 	}
 	
 }

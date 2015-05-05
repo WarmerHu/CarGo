@@ -2,10 +2,13 @@ package com.cargo.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Date;
+
+import net.minidev.json.JSONObject;
 
 import org.junit.After;
 import org.junit.Before;
@@ -91,13 +94,14 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void save() throws Exception{
 		mocMvc.perform(post("/cars/{car_id}/orders",carDao.first().getId())
-				.content("{}")
+				.content("{\"book_time\":\"2016-03-03 16:16:00\"}")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", Encrypter.encode(accountDao.first())))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.car.price").value(20001))
 				.andExpect(jsonPath("$.buyer.name").value("testa1"))
-				.andExpect(jsonPath("$.result").value("Booked"))
+				.andExpect(jsonPath("$.result").value("Booking"))
+				.andExpect(jsonPath("$.book_time").value("2016-03-03 16:16:00"))
 				.andReturn();
 	}
 	
@@ -117,6 +121,19 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
+				.andReturn();
+	}
+	
+	@Test
+	public void update() throws Exception{
+		JSONObject obj = new JSONObject();
+		obj.put("result", "Cancel");
+		obj.put("book_time", "2017-06-06 06:06:06");
+		mocMvc.perform(patch("/orders/{id}",dao.first().getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(obj.toString()))
+				.andExpect(status().is(200))
+				.andExpect(jsonPath("$.result").value("Cancel"))
 				.andReturn();
 	}
 	

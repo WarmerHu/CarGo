@@ -23,10 +23,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
-import com.cargo.dao.ICollectionDao;
+import com.cargo.dao.IFavoriteDao;
 import com.cargo.model.Account;
 import com.cargo.model.Car;
-import com.cargo.model.Collection;
+import com.cargo.model.Favorite;
 import com.cargo.model.Account.Gender;
 import com.cargo.model.Account.ProfileType;
 import com.cargo.model.Car.CarType;
@@ -35,15 +35,15 @@ import com.cargo.util.Encrypter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:database-servlet.xml")
-public class TestCollectionController extends AbstractJUnit4SpringContextTests{
+public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 
 	private MockMvc mocMvc;
 	
 	@Autowired
-	private CollectionController controller;
+	private FavoriteController controller;
 	
 	@Autowired
-	private ICollectionDao dao;
+	private IFavoriteDao dao;
 	@Autowired
 	private ICarDao carDao;
 	@Autowired
@@ -87,7 +87,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 		car.setAccount(accountDao.first());
 		carDao.create(car);
 		
-		Collection c = new Collection();
+		Favorite c = new Favorite();
 		c.setName("hello");
 		c.setOwner(accountDao.first());
 		c.addCar(car);
@@ -99,7 +99,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 		int i  = accountDao.first().getCollections().size();
 		JSONObject obj = new JSONObject();
 		obj.put("name","hello2");
-		mocMvc.perform(post("/collections")
+		mocMvc.perform(post("/favorites")
 				.content(obj.toJSONString())
 				.header("Authorization", Encrypter.encode(accountDao.first()))
 				.contentType(MediaType.APPLICATION_JSON))
@@ -111,7 +111,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void gets() throws Exception{
-		mocMvc.perform(get("/collections/{id}",dao.first().getId())
+		mocMvc.perform(get("/favorites/{id}",dao.first().getId())
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$.cars").isArray())
@@ -120,7 +120,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void getList() throws Exception{
-		mocMvc.perform(get("/collections")
+		mocMvc.perform(get("/favorites")
 				.header("Authorization", Encrypter.encode(accountDao.first()))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
@@ -131,7 +131,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void collect() throws Exception{
 		int i = dao.first().getCars().size();
-		mocMvc.perform(post("/collections/{id}",dao.first().getId())
+		mocMvc.perform(post("/favorites/{id}",dao.first().getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"car_id\":"+dao.first().getCars().get(0).getId().toString()+"}"))
 				.andExpect(status().is(201))
@@ -142,7 +142,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void remove() throws Exception{
 		int i = dao.first().getCars().size();
-		mocMvc.perform(delete("/collections/{id}",dao.first().getId())
+		mocMvc.perform(delete("/favorites/{id}",dao.first().getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"car_id\":"+dao.first().getCars().get(0).getId().toString()+"}"))
 				.andExpect(status().is(204))
@@ -153,7 +153,7 @@ public class TestCollectionController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void deletes() throws Exception{
 		int i = dao.findAll().size();
-		mocMvc.perform(delete("/collections/{id}",dao.first().getId())
+		mocMvc.perform(delete("/favorites/{id}",dao.first().getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
 				.andExpect(status().is(204))

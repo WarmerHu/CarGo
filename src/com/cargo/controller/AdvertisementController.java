@@ -19,8 +19,10 @@ import org.springframework.web.context.request.WebRequest;
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.IAdvertisementDao;
 import com.cargo.model.Advertisement;
+import com.cargo.model.Advertisement.ADState;
 import com.cargo.util.HttpUtil;
 
+//test
 @Controller
 public class AdvertisementController {
 	
@@ -33,6 +35,7 @@ public class AdvertisementController {
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public @ResponseBody JSONObject create(@RequestBody Advertisement ad,WebRequest request){
 		ad.setOwner(new HttpUtil(accountDao).getCurrentUser(request));
+		ad.setAdstate(ADState.Apply);
 		return adDao.create(ad).toJSON();
 	}
 	

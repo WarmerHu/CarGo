@@ -31,12 +31,6 @@ import com.cargo.model.Car.CarType;
 import com.cargo.util.Encrypter;
 
 
-/**
- * 
- * 示例网址	http://jinnianshilongnian.iteye.com/blog/2004660
- * @author Wealong
- *
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:database-servlet.xml")
 public class TestCarController extends AbstractJUnit4SpringContextTests{
@@ -66,6 +60,16 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 		
 		Car car = new Car();
 		car.setBrand("123");
+		car.setModel("testc1");
+		car.setStock(20001);
+		car.setPicture("f://...");
+		car.setDescription("testc1");
+		car.setPrice(20001);
+		car.setType(CarType.New);
+		car.setAccount(accountDao.first());
+		dao.create(car);
+		
+		car.setBrand("testc1");
 		car.setModel("testc1");
 		car.setStock(20001);
 		car.setPicture("f://...");
@@ -169,18 +173,16 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 		Assert.isNull(dao.find(car.getId()));
 	}
 	
-//	@Test
-//	public void search() throws Exception{
-//		String requestBody="{\"setKeyword\":\"1\"," +
-//				"\"type\":\"Used\"," +
-//				"\"hiPrice\":20001}";
-//		mocMvc.perform(post("/cars")
-//				.contentType(MediaType.APPLICATION_JSON)
-//				.content(requestBody))
-//				.andExpect(status().is(200))
-//				.andExpect(jsonPath("$").isArray())
-//				.andReturn();
-//	}
+	@Test
+	public void searchs() throws Exception{
+		mocMvc.perform(get("/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",
+				"testa1","New","testc1",null,"testa1",null,"1000",null)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(200))
+				.andExpect(jsonPath("$").isArray())
+				.andDo(MockMvcResultHandlers.print())
+				.andReturn();
+	}
 	
 	@After
 	public void setdown(){
