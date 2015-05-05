@@ -18,8 +18,8 @@ public class AdvertisementDao extends BaseDao<Advertisement> implements IAdverti
 	public void update(Advertisement ad) {
 		Advertisement old = find(ad.getId());
 		ad.setOwner(old.getOwner());
-		if(ad.getLength() == null)	ad.setLength(old.getLength());
-		if(ad.getLink() == null)	ad.setLength(old.getLength());
+//		if(ad.getTime() == null)	ad.setTime(old.getTime());
+		if(ad.getLink() == null)	ad.setLink(old.getLink());
 		if(ad.getAdstate() == null)	ad.setAdstate(old.getAdstate());
 		if(ad.getPicture() == null)	ad.setPicture(old.getPicture());
 		if(ad.getPosition() == null)	ad.setPosition(old.getPosition());

@@ -14,4 +14,5 @@ public class OrderDao extends BaseDao<Order> implements IOrderDao {
 		setClazz(Order.class);
 	}
 	
+//	update
 }

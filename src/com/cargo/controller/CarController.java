@@ -64,9 +64,9 @@ public class CarController {
 		dao.deleteById(id);
 	}
 	
-//	@RequestMapping(value="/cars",method=RequestMethod.POST)
-//	public @ResponseBody List<Car> search(@RequestBody Selection selection){
-//		return dao.findBySelection(selection);
-//	}
+	@RequestMapping(value="/cars/search?keyword={keyword}&type={type}&brand={brand}&model={model}&city={city}&loprice={loprice}&hiprice={hiprice}",method=RequestMethod.GET)
+	public @ResponseBody List<Car> search(@RequestBody String keyword, @RequestBody String type, @RequestBody String brand, @RequestBody String model, @RequestBody String city, @RequestBody int loprice, @RequestBody int hiprice){
+		return dao.findByArgs(keyword,type,brand,model,loprice,hiprice);
+	}
 	
 }

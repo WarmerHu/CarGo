@@ -18,69 +18,69 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
-import com.cargo.dao.ICollectionDao;
+import com.cargo.dao.IFavoriteDao;
 import com.cargo.model.Account;
 import com.cargo.model.Car;
-import com.cargo.model.Collection;
+import com.cargo.model.Favorite;
 import com.cargo.util.HttpUtil;
 
 //test
 @Controller
-public class CollectionController {
+public class FavoriteController {
 	
 	@Autowired
-	private ICollectionDao dao;
+	private IFavoriteDao dao;
 	@Autowired
 	private IAccountDao accountDao;
 	@Autowired
 	private ICarDao carDao;
 	
-	@RequestMapping(value="/collections",method=RequestMethod.POST)
+	@RequestMapping(value="/favorites",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public @ResponseBody JSONObject create(@RequestBody JSONObject obj,WebRequest request){
-		Collection c = new Collection();
+		Favorite c = new Favorite();
 		c.setOwner(getCurrentUser(request));
 		c.setName((String) obj.get("name"));
 		return dao.create(c).toJSON();
 	}
 	
-	@RequestMapping(value="/collections/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/favorites/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject get(@PathVariable Long id, WebRequest request){
 		return dao.find(id).toJSON();
 	}
 	
-	@RequestMapping(value="/collections/{id}",method=RequestMethod.POST)
+	@RequestMapping(value="/favorites/{id}",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public void collect(@RequestBody JSONObject obj,@PathVariable Long id, WebRequest request){
-		Collection collection = dao.find(id);
+		Favorite favorite = dao.find(id);
 		Car car = carDao.find(new Long((Integer)obj.get("car_id")));
 		if(car != null){
-			collection.addCar(car);
+			favorite.addCar(car);
 		}
-		dao.update(collection);
+		dao.update(favorite);
 	}
 	
-	@RequestMapping(value="/collections/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/favorites/{id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@RequestBody JSONObject obj,@PathVariable Long id, WebRequest request){
-		Collection collection = dao.find(id);
+		Favorite favorite = dao.find(id);
 		if(obj.containsKey("car_id")){
 			Car car = carDao.find(new Long((Integer)obj.get("car_id")));
-			System.out.println(String.valueOf(collection.getCars().contains(car)));
+			System.out.println(String.valueOf(favorite.getCars().contains(car)));
 			if(car != null){
-				collection.removeCar(car);
+				favorite.removeCar(car);
 			}
-			dao.update(collection);
+			dao.update(favorite);
 		}else{
-			dao.delete(collection);
+			dao.delete(favorite);
 		}
 	}
 	
-	@RequestMapping(value="/collections",method=RequestMethod.GET)
+	@RequestMapping(value="/favorites",method=RequestMethod.GET)
 	public @ResponseBody JSONArray list(WebRequest request){
 		JSONArray array = new JSONArray();
-		List<Collection> cs = dao.findAll();
-		for(Collection c : cs){
+		List<Favorite> cs = dao.findAll();
+		for(Favorite c : cs){
 			array.add(c.toJSON());
 		}
 		return array;
@@ -89,5 +89,6 @@ public class CollectionController {
 	private Account getCurrentUser(WebRequest request) {
 		return new HttpUtil(accountDao).getCurrentUser(request);
 	}
+	
 	
 }

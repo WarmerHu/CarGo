@@ -41,14 +41,17 @@ public class OrderController {
 		order.setBuyer(getCurrentUser(request));
 		order.setCar(carDao.find(car_id));
 		order.setBook_time(new Date());
-		order.setResult(Result.Booked);
+		order.setResult(Result.Booking);
 		return dao.create(order).toJSON();
 	} 
 	
-//	@RequestMapping(value="/orders/{id}",method=RequestMethod.PATCH)
-//	public void update(@PathVariable Long id ,WebRequest request){
-//		dao.deleteById(id);
-//	}
+	@RequestMapping(value="/orders/{id}",method=RequestMethod.PATCH)
+	public @ResponseBody JSONObject patch(@RequestBody Order order, @PathVariable Long id ,WebRequest request){
+		order.setId(id);
+		dao.update(order);
+		return dao.find(id).toJSON();
+		
+	}
 	
 	@RequestMapping(value="/cars/{car_id}/orders",method=RequestMethod.GET)
 	public @ResponseBody JSONArray carOrderList(@PathVariable Long car_id,WebRequest request){

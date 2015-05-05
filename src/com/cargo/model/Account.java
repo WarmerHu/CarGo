@@ -43,7 +43,7 @@ public class Account {
 	private String email;
 	private String address;
 	private String city;
-	private List<Collection> collections = new ArrayList<Collection>();
+	private List<Favorite> collections = new ArrayList<Favorite>();
 	private List<Car> cars=new ArrayList<Car>();
 //	private List<Advertisement> ad=new ArrayList<Advertisement>();
 	
@@ -151,11 +151,11 @@ public class Account {
 	
 	@Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy="owner",cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	public List<Collection> getCollections() {
+	public List<Favorite> getCollections() {
 		return collections;
 	}
 
-	public void setCollections(List<Collection> collections) {
+	public void setCollections(List<Favorite> collections) {
 		this.collections = collections;
 	}
 	

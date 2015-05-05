@@ -20,8 +20,8 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 @Entity
-@Table(name="collection")
-public class Collection {
+@Table(name="favorite")
+public class Favorite {
 	private Long id;
 	private String name;
 	private Account owner;

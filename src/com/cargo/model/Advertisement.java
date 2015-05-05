@@ -1,6 +1,7 @@
 package com.cargo.model;
 
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class Advertisement {
 	private Long id;
 	private String picture;
 	private String link;
-	private String length;
+//	private Date time;
 	private ADState adstate;
 	private Position position;
 	private Account owner;
@@ -87,24 +88,25 @@ public class Advertisement {
 		this.owner = owner;
 	}
 	
-	public String getLength() {
-		return length;
-	}
-	public void setLength(String length) {
-		this.length = length;
-	}
+//	@Column(name="time")
+//	public Date getTime() {
+//		return time;
+//	}
+//	public void setTime(Date time) {
+//		this.time = time;
+//	}
 	
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
 		obj.put("id", id);
 		obj.put("picture", picture);
 		obj.put("link", link);
-		obj.put("length", length);
+//		obj.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
 		obj.put("adstate", getAdstate().toString());
 		obj.put("position", getPosition().toString());
-		obj.put("owner", owner.toJSON());
+		obj.put("account_id", owner.getId());
+		obj.put("account", owner.getName());
 		return obj;
 	}
-
 	
 }
