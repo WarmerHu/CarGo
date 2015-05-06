@@ -160,7 +160,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
+//		dao.deleteAll();
 	}
 
 	

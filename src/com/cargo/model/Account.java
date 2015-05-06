@@ -104,7 +104,7 @@ public class Account {
 		this.email = email;
 	}
 
-	@Column(name = "name",nullable=false,length=16)
+	@Column(name = "name",nullable=false)
 	public String getName() {
 		return name;
 	}
@@ -140,7 +140,7 @@ public class Account {
 		this.auth_token = auth_token;
 	}
 
-	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="account")
 	public List<Car> getCars() {
 		return cars;
 	}

@@ -98,6 +98,8 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 							"\"stock\":20004," +
 							"\"price\":20004}";
 		
+		System.out.println(accountDao.first());
+		System.out.println(Encrypter.encode(accountDao.first()));
 		mocMvc.perform(post("/cars")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", Encrypter.encode(accountDao.first()))
