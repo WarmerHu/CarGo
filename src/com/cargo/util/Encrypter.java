@@ -30,6 +30,6 @@ public class Encrypter {
 	}
 	
 	public static String encode(Account a){
-		return encode(a.getName() + " " + a.getPassword());
+		return encode(a.getId() + " " +a.getName() + " " + a.getPassword());
 	}
 }

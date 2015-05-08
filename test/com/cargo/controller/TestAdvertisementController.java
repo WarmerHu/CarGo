@@ -58,13 +58,17 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 		account.setGender(Gender.Lady);
 		account.setTelephone("10000000001");
 		account.setType(ProfileType.Buyer);
+		String encrypt = Encrypter.encode(account);
+		account.setAuth_token(encrypt);
 		accountDao.create(account);
+		
 		
 //		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Advertisement a = new Advertisement();
 		a.setAdstate(ADState.Approval);
 //		a.setLength(df.format(new Date()));
 		a.setLink(null);
+		a.setWord(null);
 		a.setOwner(accountDao.first());
 		a.setPicture("f：//...");
 		a.setPosition(Position.Home);
@@ -78,6 +82,7 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 		obj.put("link", "testad1");
 		obj.put("picture", "testad1://a/ad.jpg");
 		obj.put("position", "Top");
+		obj.put("word", "testad1");
 		
 		mocMvc.perform(post("/ads")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -87,6 +92,7 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 				.andExpect(jsonPath("$.id").exists())
 //				.andExpect(jsonPath("$.length").value("2016-3-3 1:1:1"))
 				.andExpect(jsonPath("$.link").value("testad1"))
+				.andExpect(jsonPath("$.word").value("testad1"))
 				.andExpect(jsonPath("$.adstate").value("Apply"))
 				.andExpect(jsonPath("$.position").value("Top"))
 				.andExpect(jsonPath("$.picture").value("testad1://a/ad.jpg"))

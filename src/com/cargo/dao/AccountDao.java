@@ -20,6 +20,10 @@ public class AccountDao extends BaseDao<Account> implements IAccountDao {
 		return (Account) getCurrentSession().createQuery("from Account as a where a.name = ?").setString(0, name).uniqueResult();
 	}
 	
+	public Account findById(Long id){
+		return (Account) getCurrentSession().createQuery("from Account as a where a.id = ?").setLong(0, id).uniqueResult();
+	}
+	
 	@Override
 	public void update(Account account) {
 		Account old = find(account.getId());

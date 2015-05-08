@@ -30,6 +30,7 @@ public class Advertisement {
 	
 	private Long id;
 	private String picture;
+	private String word;
 	private String link;
 //	private Date time;
 	private ADState adstate;
@@ -79,7 +80,7 @@ public class Advertisement {
 		this.position = position;
 	}
 	
-	@ManyToOne(cascade=CascadeType.ALL,optional=true)
+	@ManyToOne(cascade =CascadeType.ALL)
 	@JoinColumn(name="owner",nullable=false)
 	public Account getOwner() {
 		return owner;
@@ -101,12 +102,21 @@ public class Advertisement {
 		obj.put("id", id);
 		obj.put("picture", picture);
 		obj.put("link", link);
+		obj.put("word", word);
 //		obj.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
 		obj.put("adstate", getAdstate().toString());
 		obj.put("position", getPosition().toString());
 		obj.put("account_id", owner.getId());
 		obj.put("account", owner.getName());
 		return obj;
+	}
+	
+	@Column(name="word")
+	public String getWord() {
+		return word;
+	}
+	public void setWord(String word) {
+		this.word = word;
 	}
 	
 }

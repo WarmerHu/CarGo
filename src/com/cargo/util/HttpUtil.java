@@ -29,7 +29,7 @@ public class HttpUtil {
 				e.printStackTrace();
 			}
 			String[] tokens = token.split(" ");
-			account = dao.findByName(tokens[0]);
+			account = dao.findById(Long.parseLong(tokens[0]));
 			if(account!=null){
 				request.setAttribute("current_user", account, 2);
 				return account;
