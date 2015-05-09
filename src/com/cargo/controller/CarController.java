@@ -18,6 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
+import com.cargo.dao.IFavoriteDao;
+import com.cargo.model.Account;
 import com.cargo.model.Car;
 import com.cargo.util.HttpUtil;
 
@@ -28,6 +30,8 @@ public class CarController {
 	private ICarDao dao;
 	@Autowired
 	private IAccountDao accountDao;
+	@Autowired
+	private IFavoriteDao favorDao;
 	
 	@RequestMapping(value="/cars",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
@@ -37,11 +41,16 @@ public class CarController {
 	}
 	
 	@RequestMapping(value="/cars",method=RequestMethod.GET)
-	public @ResponseBody JSONArray list(){
+	public @ResponseBody JSONArray list(WebRequest request){
+		Account currentUser = new HttpUtil(accountDao).getCurrentUser(request);
 		JSONArray array = new JSONArray();
+		
 		List<Car> cars = dao.findAll();
+		JSONObject obj;
 		for(Car car : cars){
-			array.add(car.toJSON());
+			obj = car.toJSON();
+			obj.put("isFavor", favorDao.isFavor(currentUser, car));
+			array.add(obj);
 		}
 		return array;
 	}

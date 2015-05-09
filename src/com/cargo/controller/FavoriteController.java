@@ -53,7 +53,8 @@ public class FavoriteController {
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public void collect(@RequestBody JSONObject obj,@PathVariable Long id, WebRequest request){
 		Favorite favorite = dao.find(id);
-		Car car = carDao.find(new Long((Integer)obj.get("car_id")));
+		Long carid = Long.parseLong(obj.get("car_id").toString());
+		Car car = carDao.find(carid);
 		if(car != null){
 			favorite.addCar(car);
 		}

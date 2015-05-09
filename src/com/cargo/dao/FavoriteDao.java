@@ -2,6 +2,7 @@ package com.cargo.dao;
 
 import org.springframework.stereotype.Repository;
 
+import com.cargo.model.Account;
 import com.cargo.model.Car;
 import com.cargo.model.Favorite;
 
@@ -28,5 +29,14 @@ public class FavoriteDao extends BaseDao<Favorite> implements IFavoriteDao {
 			.setParameter(0, favorite.getId())
 			.setParameter(1,car.getId())
 			.executeUpdate();
+	}
+
+	@Override
+	public boolean isFavor(Account account, Car car) {
+		for(Favorite favor : account.getCollections()){
+			if(favor.getCars().contains(car))
+				return true;
+		}
+		return false;
 	}
 }
