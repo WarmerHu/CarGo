@@ -61,20 +61,25 @@ public class FavoriteController {
 		dao.update(favorite);
 	}
 	
-	@RequestMapping(value="/favorites/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/favorites/{id}/cars/{car_id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remove(@RequestBody JSONObject obj,@PathVariable Long id, WebRequest request){
+	public void remove(@PathVariable Long car_id, @PathVariable Long id, WebRequest request){
 		Favorite favorite = dao.find(id);
-		if(obj.containsKey("car_id")){
-			Car car = carDao.find(new Long((Integer)obj.get("car_id")));
-			System.out.println(String.valueOf(favorite.getCars().contains(car)));
-			if(car != null){
-				favorite.removeCar(car);
-			}
-			dao.update(favorite);
+		Car car = carDao.find(car_id);
+		System.out.println(String.valueOf(favorite.getCars().contains(car)));
+		if(car != null){
+			favorite.removeCar(car);
+		dao.update(favorite);
 		}else{
 			dao.delete(favorite);
 		}
+	}
+	
+	@RequestMapping(value="/favorites/{id}",method=RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id, WebRequest request){
+		Favorite favorite = dao.find(id);
+		dao.delete(favorite);
 	}
 	
 	@RequestMapping(value="/favorites",method=RequestMethod.GET)
