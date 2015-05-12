@@ -71,6 +71,7 @@ public class Comment {
 		obj.put("id", id);
 		obj.put("account_id", owner.getId());
 		obj.put("account", owner.getName());
+		obj.put("car_id", car.getId());
 		obj.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
 		obj.put("content", content);
 		return obj;

@@ -28,7 +28,7 @@ public class FileUploadController {
         }
 		file.transferTo(filePath);
         JSONObject obj = new JSONObject();
-        obj.put("url", "resources/images/"  + file.getOriginalFilename());
+        obj.put("picture", "resources/images/"  + file.getOriginalFilename());
         return obj;
 	}
 }

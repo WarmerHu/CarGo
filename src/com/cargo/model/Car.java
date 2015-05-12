@@ -138,6 +138,7 @@ public class Car{
 		obj.put("price", price);
 		obj.put("stock", stock);
 		obj.put("owner", account.getName());
+		obj.put("account", account.getName());
 		return obj;
 	}
 

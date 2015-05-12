@@ -104,7 +104,7 @@ public class Account {
 		this.email = email;
 	}
 
-	@Column(name = "name",nullable=false)
+	@Column(name = "name",nullable=false,unique=true)
 	public String getName() {
 		return name;
 	}
