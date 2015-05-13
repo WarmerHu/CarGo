@@ -1,7 +1,8 @@
 package com.cargo.model;
 
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,19 +14,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 import net.minidev.json.JSONObject;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name="car")
 public class Car{
 	
 	public enum CarType{
-		New, Used
+		两厢, 三厢,微面车,豪华车,新能源车,SUV越野车,MPV商务车
 	}
 	private Long id;
 	private int stock;
@@ -36,8 +37,31 @@ public class Car{
 	private Account account;
 	private String description;
 	private int price;
-	private List<Comment> Comments;
+	private int discount;
+	private CarBody carBody;
+	private CarTechnique carTechnique;
+	private CarEngine carEngine;
+
+	private Set<Comment> Comments;
 	
+	
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("description", description);
+		obj.put("picture", picture);
+		obj.put("type", getType().toString());
+		obj.put("brand", brand);
+		obj.put("model", model);
+		obj.put("price", price);
+		obj.put("discount", discount);
+		obj.put("stock", stock);
+		obj.put("owner", account.getId());
+		obj.put("carBody", carBody.toJSON());
+		obj.put("carTechnique", carTechnique.toJSON());
+		obj.put("carEngine", carEngine.toJSON());
+		return obj;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,7 +72,7 @@ public class Car{
 		this.id = id;
 	}
 	
-	@ManyToOne()
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="accountid",nullable=false)
 	public Account getAccount() {
 		return account;
@@ -113,12 +137,11 @@ public class Car{
 		this.price = price;
 	}
 	
-	@Fetch(FetchMode.SUBSELECT)
 	@OneToMany(mappedBy="car",fetch=FetchType.EAGER)
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return Comments;
 	}
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		Comments = comments;
 	}
 	
@@ -126,19 +149,44 @@ public class Car{
 	public boolean equals(Object obj) {
 		return getId().equals(((Car)obj).getId());
 	}
+
 	
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("id", id);
-		obj.put("description", description);
-		obj.put("picture", picture);
-		obj.put("type", getType().toString());
-		obj.put("brand", brand);
-		obj.put("model", model);
-		obj.put("price", price);
-		obj.put("stock", stock);
-		obj.put("owner", account.getId());
-		return obj;
+	@Column(name="discount")
+	public int getDiscount() {
+		return discount;
+	}
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn()
+	public CarBody getCarBody() {
+		return carBody;
+	}
+	public void setCarBody(CarBody carBody) {
+		this.carBody = carBody;
+	}
+
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn()
+	public CarTechnique getCarTechnique() {
+		return carTechnique;
+	}
+
+	public void setCarTechnique(CarTechnique carTechnique) {
+		this.carTechnique = carTechnique;
+	}
+
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn()
+	public CarEngine getCarEngine() {
+		return carEngine;
+	}
+
+	public void setCarEngine(CarEngine carEngine) {
+		this.carEngine = carEngine;
 	}
 
 }

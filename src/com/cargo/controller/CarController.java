@@ -33,6 +33,7 @@ public class CarController {
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public @ResponseBody JSONObject create(@RequestBody Car car,WebRequest request){
 		car.setAccount(new HttpUtil(accountDao).getCurrentUser(request));
+		System.out.println(car.getCarBody());
 		return dao.create(car).toJSON();
 	}
 	
@@ -52,22 +53,27 @@ public class CarController {
 	}
 	
 	@RequestMapping(value="/cars/{id}",method=RequestMethod.PATCH)
-	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long id){
-		car.setId(id);
-		dao.update(car);
+	public @ResponseBody JSONObject patch(@RequestBody JSONObject obj,@PathVariable Long id){
+		Car car = dao.find(id);
+		dao.update(car,obj);
 		return dao.find(id).toJSON();
 	}
 	
 	@RequestMapping(value="/cars/{id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public @ResponseBody void delete(@PathVariable Long id){
+//		Session s = dao.getCurrentSession();
+//		Car c = (Car)s.load(Car.class,id);
 		dao.deleteById(id);
+//		s.delete(c); 
+		
 	}
 	
-	@RequestMapping(value="/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
-	public @ResponseBody JSONArray list(@PathVariable String keyword, @PathVariable String type, @PathVariable String brand, @PathVariable String model, @PathVariable String city, @PathVariable String suppliers, @PathVariable String loprice, @PathVariable String hiprice){
+//	@RequestMapping(value="/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
+	@RequestMapping(value="/cars/search/{brand}&{type}&{model}&{loprice}&{hiprice}&{gearBox}&{displacement}",method=RequestMethod.GET)
+	public @ResponseBody JSONArray list(@PathVariable String brand,@PathVariable String type,@PathVariable String model,@PathVariable String loprice,@PathVariable String hiprice,@PathVariable String gearBox, @PathVariable String displacement){
 		JSONArray array = new JSONArray();
-		List<Car> cars = dao.findByArgs(keyword,type,brand,model,city, suppliers, loprice,hiprice);
+		List<Car> cars = dao.findByArgs(brand,type,model,loprice,hiprice, gearBox, displacement);
 		for(Car car : cars){
 			array.add(car.toJSON());
 		}

@@ -1,17 +1,27 @@
 package com.cargo.dao;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+
+import net.minidev.json.JSONObject;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.cargo.model.Account;
 import com.cargo.model.Car;
+import com.cargo.model.CarEngine;
+import com.cargo.model.CarEngine.IntakeType;
+import com.cargo.model.CarEngine.OilFeedType;
+import com.cargo.model.CarTechnique;
+import com.cargo.model.CarTechnique.DriveType;
+import com.cargo.model.CarTechnique.Gearbox;
+import com.cargo.model.CarTechnique.ResistanceType;
 import com.cargo.model.Car.CarType;
 import com.cargo.model.Order;
 
@@ -24,75 +34,118 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 	}
 	
 	
-	@Override
-	public void update(Car car) {
-		Car old = find(car.getId());
-		car.setAccount(old.getAccount());
-		if(car.getStock() == 0) car.setStock(old.getStock());
-		if(car.getPicture() == null) car.setPicture(old.getPicture());
-		if(car.getBrand() == null) car.setBrand(old.getBrand());
-		if(car.getModel() == null) car.setModel(old.getModel());
-		if(car.getType() == null) car.setType(old.getType());
-		if(car.getDescription() == null) car.setDescription(old.getDescription());
-		if(car.getPrice() == 0) car.setPrice(old.getPrice());
+	@SuppressWarnings("unchecked")
+	public void update(Car car, JSONObject obj) {
+		System.out.println("car.gets:"+car.getStock());
+		
+		if(obj.get("stock").toString() != null){ 
+			car.setStock((Integer) obj.get("stock"));
+			System.out.println("obj.gets:"+obj.get("stock"));
+		}
+		if(obj.get("picture") != null){
+			car.setPicture(obj.get("picture").toString());
+			System.out.println("pic:"+obj.get("picture"));
+		}
+		if(obj.get("brand") != null) car.setBrand(obj.get("brand").toString());
+		if(obj.get("model") != null) car.setModel(obj.get("model").toString());
+		if(obj.get("type") != null) car.setType(CarType.valueOf(obj.get("type").toString()));
+		if(obj.get("description") != null) car.setDescription(obj.get("Description").toString());
+		if(obj.get("price") != null) car.setPrice((Integer) obj.get("price"));
+		if(obj.get("discount") != null) car.setDiscount((Integer) obj.get("discount"));
+		System.out.println("car.gets:"+car.getStock());
+		if(obj.get("carBody") != null){
+			Map<String,String> cb = (( LinkedHashMap<String, String>) obj.get("carBody"));
+			System.out.println("cb:"+cb);
+			System.out.println(car.getCarBody());
+			System.out.println(car.getCarBody().getDoor());
+			if(cb.get("door") != null) car.getCarBody().setDoor(Integer.parseInt(String.valueOf(cb.get("door"))));
+			if(cb.get("fuelTank") != null) car.getCarBody().setFuelTank(Integer.parseInt(String.valueOf(cb.get("fuelTank"))));
+			if(cb.get("groundClearance") != null) car.getCarBody().setGroundClearance(Integer.parseInt(String.valueOf(cb.get("groundClearance"))));
+			if(cb.get("guarantee") != null) car.getCarBody().setGuarantee(cb.get("guarantee"));
+			if(cb.get("height") != null) car.getCarBody().setHeight(Integer.parseInt(String.valueOf(cb.get("height"))));
+			if(cb.get("length") != null) car.getCarBody().setLength(Integer.parseInt(String.valueOf(cb.get("length"))));
+			if(cb.get("seat") != null) car.getCarBody().setSeat(Integer.parseInt(String.valueOf(cb.get("seat"))));
+			if(cb.get("trunkSpace") != null) car.getCarBody().setTrunkSpace(Integer.parseInt(String.valueOf(cb.get("trunkSpace"))));
+			if(cb.get("weight") != null) car.getCarBody().setWeight(Integer.parseInt(String.valueOf(cb.get("weight"))));
+			if(cb.get("wheelbase") != null) car.getCarBody().setWheelbase(Integer.parseInt(String.valueOf(cb.get("wheelbase"))));
+			if(cb.get("width") != null) car.getCarBody().setWidth(Integer.parseInt(String.valueOf(cb.get("width"))));
+			if(cb.get("width") != null) car.getCarBody().setWidth(Integer.parseInt(String.valueOf(cb.get("width"))));
+			System.out.println(car.getCarBody().getDoor());
+		}
+		if(obj.get("carTechnique") != null){
+			Map<String,String> ct = (( LinkedHashMap<String, String>) obj.get("carTechnique"));
+			System.out.println("ct:"+ct);
+			System.out.println("ct.geth:"+car.getCarTechnique().getGearNum());
+			if(ct.get("gearNum") != null) 
+				car.getCarTechnique().setGearNum(Integer.parseInt(String.valueOf(ct.get("gearNum"))));
+			
+			if(ct.get("maxSpeed") != null)
+				car.getCarTechnique().setMaxSpeed(Integer.parseInt(String.valueOf(ct.get("maxSpeed"))));
+			if(ct.get("driveType") != null) 
+				car.getCarTechnique().setDriveType(DriveType.valueOf(ct.get("driveType")));
+			if(ct.get("gearbox") != null) car.getCarTechnique().setGearbox(Gearbox.valueOf(ct.get("gearbox").toString()));
+			if(ct.get("resistanceType") != null) car.getCarTechnique().setResistanceType(ResistanceType.valueOf(ct.get("resistanceType").toString()));
+			if(ct.get("tyre") != null) car.getCarTechnique().setTyre(ct.get("tyre").toString());
+			System.out.println("car.geth:"+car.getCarTechnique().getGearNum());
+		}
+		if(obj.get("carEngine") != null){
+			Map<String,String> ce = (( LinkedHashMap<String, String>) obj.get("carEngine"));
+			System.out.println(ce);
+			System.out.println(car.getCarEngine().getCylinder());
+			if(ce.get("cylinder") != null) car.getCarEngine().setCylinder(Integer.parseInt(String.valueOf(ce.get("cylinder"))));
+			if(ce.get("displacement") != null) car.getCarEngine().setDisplacement(Integer.parseInt(String.valueOf(ce.get("displacement"))));
+			if(ce.get("fuelLabel") != null) car.getCarEngine().setFuelLabel(Integer.parseInt(String.valueOf(ce.get("fuelLabel"))));
+			if(ce.get("maxPower") != null) car.getCarEngine().setMaxPower(Integer.parseInt(String.valueOf(ce.get("maxPower"))));
+			if(ce.get("maxTorque") != null) car.getCarEngine().setMaxTorque(Integer.parseInt(String.valueOf(ce.get("maxTorque"))));
+			if(ce.get("environmental") != null) car.getCarEngine().setEnvironmental(ce.get("environmental").toString());
+			if(ce.get("intake") != null) car.getCarEngine().setIntake(IntakeType.valueOf(ce.get("intake").toString()));
+			if(ce.get("oilFeed") != null) car.getCarEngine().setOilFeed(OilFeedType.valueOf(ce.get("oilFeed").toString()));
+			System.out.println(car.getCarEngine().getCylinder());
+		}
 		super.update(car);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Car> findByArgs(String keyword, String type, String brand, String model, String city, String suppliers, String loprice, String hiprice){
+//	@RequestMapping(value="/cars/search/{brand}&{type}&{model}&{loprice}&{hiprice}&{gearBox}&{displacement}",method=RequestMethod.GET)
+	public List<Car> findByArgs(String...args){
 		Session session = getCurrentSession();
 		Criteria criteria=session.createCriteria(Car.class);
 		Criterion criterion = null;
-		if(!brand.equals(""))	
-			criterion = Restrictions.eq("brand", brand);
-		if(!model.equals("")){
-			if(criterion == null)	criterion = Restrictions.eq("model", model);
-			else	criterion = Restrictions.and(criterion, Restrictions.eq("model", model));
+		if(!args[0].equals(""))	
+			criterion = Restrictions.eq("brand", args[0]);
+		if(!args[1].equals("")){
+			if(criterion == null)	criterion = Restrictions.eq("type", CarType.valueOf(args[1]));
+			else	criterion = Restrictions.and(criterion, Restrictions.eq("type", CarType.valueOf(args[1])));
 		}
-		if(!type.equals("")){
-			if(criterion == null)	criterion = Restrictions.eq("type", CarType.valueOf(type).ordinal());
-			else	criterion = Restrictions.and(criterion, Restrictions.eq("type", CarType.valueOf(type)));
-		}
-		if(hiprice.equals("")) hiprice = "999999";
-		if(loprice.equals("")) loprice = "0";
-		if(criterion == null)	criterion = Restrictions.between("price", Integer.parseInt(loprice), Integer.parseInt(hiprice));
-		else	criterion = Restrictions.and(criterion, Restrictions.between("price", Integer.parseInt(loprice), Integer.parseInt(hiprice)));
-		
-		if(!city.equals("") || !suppliers.equals("")){
-			Query query = null;
-			List<Account> a = null;
-			if(!city.equals("")){
-				if(!suppliers.equals(""))	
-					query = session.createQuery("from Account as a where a.city=? and a.name=?")
-						.setString(0, city)
-						.setString(1, suppliers);
-				else	
-					query = session.createQuery("from Account as a where a.city=?")
-						.setString(0, city);
-			}
-			else if(!suppliers.equals(""))	
-				query = session.createQuery("from Account as a where a.name=?")
-					.setString(0, suppliers);
-			if(query != null){
-				System.out.println(query);
-				try{
-					a = query.list();
-				}
-				catch (Exception ex){
-					System.out.println(ex);
-				}
-				if(criterion == null)	criterion = Restrictions.in("account", a);
-				else	criterion = Restrictions.and(criterion, Restrictions.in("account", a));
-
-			}
+		if(!args[2].equals("")){
+			if(criterion == null)	criterion = Restrictions.eq("model", args[2]);
+			else	criterion = Restrictions.and(criterion, Restrictions.eq("model", args[2]));
 		}
 		
-		return criteria.add(
-				Restrictions.or(
-						Restrictions.like("description", keyword, MatchMode.ANYWHERE),
-						criterion
-						)
-				).list();
+		if(args[3].equals("")) args[3] = "0";
+		if(args[4].equals("")) args[4] = "99999999";
+		if(criterion == null)	criterion = Restrictions.between("price", Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+		else	criterion = Restrictions.and(criterion, Restrictions.between("price", Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+		
+		if(!args[5].equals("")){
+			System.out.println(Gearbox.valueOf(args[5]).ordinal());
+			Query q = session.createQuery("from CarTechnique as c where c.gearbox=?")
+					.setInteger(0, Gearbox.valueOf(args[5]).ordinal());
+			List<CarTechnique> a = q.list();
+			if(criterion == null)	criterion = Restrictions.in("carTechnique", a);
+			else	criterion = Restrictions.and(criterion, Restrictions.in("carTechnique", a));
+		}
+		
+		if(!args[6].equals("")){
+			Query q = session.createQuery("from CarEngine as c where c.displacement=?")
+					.setInteger(0, Integer.parseInt(args[6]));
+			List<CarEngine> a = q.list();
+			if(criterion == null)	criterion = Restrictions.in("carEngine", a);
+			else	criterion = Restrictions.and(criterion, Restrictions.in("carEngine", a));
+		}
+		
+		
+		return criteria.add(criterion).list();
 	}
 
 
