@@ -2,7 +2,10 @@ package com.cargo.dao;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
 public interface IBaseDao<T> {
+	public Session getCurrentSession();
 	public T find(final long id);
 	
 //	public List<T> find(T t);

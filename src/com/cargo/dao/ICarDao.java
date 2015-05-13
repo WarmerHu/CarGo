@@ -7,6 +7,7 @@ import net.minidev.json.JSONObject;
 import com.cargo.model.Car;
 import com.cargo.model.Order;
 
+//test
 public interface ICarDao extends IBaseDao<Car>{
 	List<Car> findByArgs(String...args);
 

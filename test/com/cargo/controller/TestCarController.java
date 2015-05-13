@@ -41,6 +41,7 @@ import com.cargo.model.CarTechnique.ResistanceType;
 import com.cargo.util.Encrypter;
 
 
+//test
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:database-servlet.xml")
 public class TestCarController extends AbstractJUnit4SpringContextTests{

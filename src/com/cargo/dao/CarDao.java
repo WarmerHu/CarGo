@@ -25,6 +25,7 @@ import com.cargo.model.CarTechnique.ResistanceType;
 import com.cargo.model.Car.CarType;
 import com.cargo.model.Order;
 
+//test
 @Repository
 public class CarDao extends BaseDao<Car> implements ICarDao {
 	
