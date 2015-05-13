@@ -31,7 +31,6 @@ import com.cargo.model.Account.ProfileType;
 /**
  * 
  * 示例网址	http://jinnianshilongnian.iteye.com/blog/2004660
- * @author Wealong
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -160,7 +159,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-//		dao.deleteAll();
+		dao.deleteAll();
 	}
 
 	
