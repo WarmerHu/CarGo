@@ -1,7 +1,6 @@
 package com.cargo.controller;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import net.minidev.json.JSONArray;
