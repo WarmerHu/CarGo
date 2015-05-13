@@ -26,10 +26,18 @@ import com.cargo.dao.ICarDao;
 import com.cargo.dao.IFavoriteDao;
 import com.cargo.model.Account;
 import com.cargo.model.Car;
+import com.cargo.model.CarBody;
+import com.cargo.model.CarEngine;
+import com.cargo.model.CarTechnique;
 import com.cargo.model.Favorite;
 import com.cargo.model.Account.Gender;
 import com.cargo.model.Account.ProfileType;
 import com.cargo.model.Car.CarType;
+import com.cargo.model.CarEngine.IntakeType;
+import com.cargo.model.CarEngine.OilFeedType;
+import com.cargo.model.CarTechnique.DriveType;
+import com.cargo.model.CarTechnique.Gearbox;
+import com.cargo.model.CarTechnique.ResistanceType;
 import com.cargo.util.Encrypter;
 
 
@@ -49,10 +57,7 @@ public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 	@Autowired
 	private IAccountDao accountDao;
 	
-	
-	@Before
-	public void setup(){
-		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
+public void initialDate(){
 		
 		Account account = new Account();
 		account.setName("testa1");
@@ -65,6 +70,37 @@ public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 		account.setType(ProfileType.Buyer);
 		accountDao.create(account);
 		
+		CarBody cb = new CarBody();
+		cb.setDoor(4);
+		cb.setFuelTank(4);
+		cb.setGroundClearance(140);
+		cb.setGuarantee("4年4万公里");
+		cb.setHeight(140);
+		cb.setLength(400);
+		cb.setSeat(4);
+		cb.setTrunkSpace(4);
+		cb.setWeight(400);
+		cb.setWheelbase(2040);
+		cb.setWidth(240);
+		
+		CarTechnique ct = new CarTechnique();
+		ct.setDriveType(DriveType.中置后驱);
+		ct.setGearbox(Gearbox.AT);
+		ct.setGearNum(4);
+		ct.setMaxSpeed(120);
+		ct.setResistanceType(ResistanceType.液压助力);
+		ct.setTyre("185/60R14");
+		
+		CarEngine ce = new CarEngine();
+		ce.setCylinder(4);
+		ce.setDisplacement(400);
+		ce.setEnvironmental("test环保标准001");
+		ce.setFuelLabel(90);
+		ce.setIntake(IntakeType.机械增压);
+		ce.setMaxPower(80);
+		ce.setMaxTorque(100);
+		ce.setOilFeed(OilFeedType.化油器);
+		
 		Car car = new Car();
 		car.setBrand("123");
 		car.setModel("testc1");
@@ -72,26 +108,41 @@ public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 		car.setPicture("f://...");
 		car.setDescription("testc1");
 		car.setPrice(20001);
-		car.setType(CarType.New);
+		car.setDiscount(20000);
+		car.setType(CarType.MPV商务车);
+		car.setCarBody(cb);
+		car.setCarEngine(ce);
+		car.setCarTechnique(ct);
 		car.setAccount(accountDao.first());
 		carDao.create(car);
-		
-		car = new Car();
-		car.setBrand("321");
-		car.setModel("testc2");
-		car.setStock(20002);
-		car.setPicture("f://...");
-		car.setDescription("testc2");
-		car.setPrice(20002);
-		car.setType(CarType.New);
-		car.setAccount(accountDao.first());
-		carDao.create(car);
-		
+
 		Favorite c = new Favorite();
 		c.setName("hello");
 		c.setOwner(accountDao.first());
 		c.addCar(car);
+
+		
+//		car = new Car();
+//		car.setBrand("321");
+//		car.setModel("testc2");
+//		car.setStock(20002);
+//		car.setPicture("f://...");
+//		car.setDescription("testc2");
+//		car.setPrice(20002);
+//		car.setType(CarType.SUV越野车);
+//		car.setAccount(accountDao.first());
+//		carDao.create(car);
+//
+//		c.addCar(car);
 		dao.create(c);
+
+
+}
+	
+	@Before
+	public void setup(){
+		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		this.initialDate();
 	}
 	
 	@Test

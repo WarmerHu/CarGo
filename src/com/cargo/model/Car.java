@@ -56,9 +56,12 @@ public class Car{
 		obj.put("discount", discount);
 		obj.put("stock", stock);
 		obj.put("owner", account.getId());
-		obj.put("carBody", carBody.toJSON());
-		obj.put("carTechnique", carTechnique.toJSON());
-		obj.put("carEngine", carEngine.toJSON());
+		if(getCarBody() != null)
+			obj.put("carBody", carBody.toJSON());
+		if(getCarTechnique() != null)
+			obj.put("carTechnique", carTechnique.toJSON());
+		if(getCarEngine() != null)
+			obj.put("carEngine", carEngine.toJSON());
 		return obj;
 	}
 	
