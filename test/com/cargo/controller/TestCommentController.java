@@ -40,6 +40,7 @@ import com.cargo.util.Encrypter;
  * 
  * 示例网址	http://jinnianshilongnian.iteye.com/blog/2004660
  * @author Wealong
+ * @author Warmer
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -80,7 +81,7 @@ public class TestCommentController extends AbstractJUnit4SpringContextTests{
 		car.setPicture("f://...");
 		car.setDescription("testc1");
 		car.setPrice(20001);
-		car.setType(CarType.New);
+		car.setType(CarType.MPV商务车);
 		car.setAccount(accountDao.first());
 		carDao.create(car);
 		
