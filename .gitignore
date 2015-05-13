@@ -4,3 +4,5 @@ WebRoot/WEB-INF/lib/*
 .settings
 .classpath
 *.log
+config/test-persistence-mysql.properties
+src/persistence-mysql.properties
