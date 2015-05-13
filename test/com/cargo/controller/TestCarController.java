@@ -64,9 +64,9 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
 		account.setCity("testa1");
-		account.setGender(Gender.LADY);
+		account.setGender(Gender.Lady);
 		account.setTelephone("10000000001");
-		account.setType(ProfileType.BUYER);
+		account.setType(ProfileType.Buyer);
 		accountDao.create(account);
 		
 		CarBody cb = new CarBody();
@@ -172,6 +172,7 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 		obj.put("carEngine", ce);
 		System.out.println(accountDao.first());
 		System.out.println(Encrypter.encode(accountDao.first()));
+
 		mocMvc.perform(post("/cars")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", Encrypter.encode(accountDao.first()))
@@ -196,9 +197,11 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void getList() throws Exception{
 		mocMvc.perform(get("/cars")
-				.contentType(MediaType.APPLICATION_JSON))
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", Encrypter.encode(accountDao.first())))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
+				.andExpect(jsonPath("$[0].isFavor").value(false))
 				.andDo(MockMvcResultHandlers.print())
 				.andReturn();
 	}
@@ -273,7 +276,6 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
-				.andDo(MockMvcResultHandlers.print())
 				.andReturn();
 	}
 	

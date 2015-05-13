@@ -46,7 +46,7 @@ public class Favorite {
 	}
 	
 	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="collection_car",joinColumns={@JoinColumn(name="collectionid")},inverseJoinColumns={@JoinColumn(name="carid")}) 
+	@JoinTable(name="favorite_car",joinColumns={@JoinColumn(name="favoriteid")},inverseJoinColumns={@JoinColumn(name="carid")}) 
 	public List<Car> getCars() {
 		return cars;
 	}

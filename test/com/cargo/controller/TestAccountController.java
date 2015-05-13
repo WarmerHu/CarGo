@@ -51,7 +51,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(accountController).build();
 		Account account = new Account();
-		account.setName("testa1");
+		account.setName("testa2");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -91,7 +91,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void login() throws Exception{
-		String requestbody = "{\"name\":\"testa1\",\"password\":\"testa1\"}";
+		String requestbody = "{\"name\":\"testa2\",\"password\":\"testa1\"}";
 		mocMvc.perform(post("/accounts/login")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestbody))

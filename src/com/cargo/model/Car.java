@@ -20,7 +20,6 @@ import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
 
-//test
 @Entity
 @Table(name="car")
 public class Car{

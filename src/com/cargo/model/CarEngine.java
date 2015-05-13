@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 import net.minidev.json.JSONObject;
 
-//test
 @Entity
 @Table(name="carEngine")
 public class CarEngine {

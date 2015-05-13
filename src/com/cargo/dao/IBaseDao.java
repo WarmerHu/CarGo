@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+//test
 public interface IBaseDao<T> {
 	public Session getCurrentSession();
 	public T find(final long id);

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.base.Preconditions;
 
-//test
 public class BaseDao<T> implements IBaseDao<T> {
 	
 	@Autowired

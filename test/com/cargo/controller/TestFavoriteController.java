@@ -142,9 +142,8 @@ public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void remove() throws Exception{
 		int i = dao.first().getCars().size();
-		mocMvc.perform(delete("/favorites/{id}",dao.first().getId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"car_id\":"+dao.first().getCars().get(0).getId().toString()+"}"))
+		mocMvc.perform(delete("/favorites/{id}/cars/{car_id}",dao.first().getId(),dao.first().getCars().get(0).getId())
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(204))
 				.andReturn();
 		Assert.assertEquals(dao.first().getCars().size(), i - 1);
@@ -154,8 +153,7 @@ public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 	public void deletes() throws Exception{
 		int i = dao.findAll().size();
 		mocMvc.perform(delete("/favorites/{id}",dao.first().getId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{}"))
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(204))
 				.andReturn();
 		Assert.assertEquals(dao.findAll().size(), i - 1);

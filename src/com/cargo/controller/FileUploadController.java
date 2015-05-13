@@ -3,6 +3,8 @@ package com.cargo.controller;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.minidev.json.JSONObject;
 
 import org.springframework.stereotype.Controller;
@@ -18,11 +20,15 @@ public class FileUploadController {
 
 	@RequestMapping(value="/upload", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject upload(@RequestParam(value = "data", required = false) MultipartFile file) throws IllegalStateException, IOException{
-        File filePath = new File("WebRoot/WEB-INF/resources/images/"  + file.getOriginalFilename());
+	public JSONObject upload(@RequestParam(value = "data", required = false) MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException{
+		String path = request.getSession().getServletContext().getRealPath("/");
+        File filePath = new File(path + "WEB-INF/resources/images/"  + file.getOriginalFilename());
+        if(!(filePath.exists())){
+        	filePath.createNewFile();
+        }
 		file.transferTo(filePath);
         JSONObject obj = new JSONObject();
-        obj.put("url", "WEB-INF/resources/images/"  + file.getOriginalFilename());
+        obj.put("picture", "resources/images/"  + file.getOriginalFilename());
         return obj;
 	}
 }

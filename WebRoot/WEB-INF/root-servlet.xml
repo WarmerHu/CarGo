@@ -36,10 +36,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 		</list>
 	</property>
 </bean>
-<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"  
-        p:defaultEncoding="UTF-8"  
-        p:maxUploadSize="5400000"  
-        p:uploadTempDir="fileUpload/temp"/> -->
+<bean id="multipartResolver" 
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver"  
+    p:defaultEncoding="UTF-8"  
+    p:maxUploadSize="5400000"  
+    p:uploadTempDir="fileUpload/temp"/>
  
  <!-- database -->
  <context:property-placeholder location="classpath:persistence-mysql.properties" />
@@ -109,11 +110,14 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
  	
  	<!-- 拦截器 -->
 	<mvc:interceptors>
-	    
 	    <mvc:interceptor>
 	       <mvc:mapping path="/*" />
 	       <mvc:exclude-mapping path="(/accounts)|(/login/{id})"/>
 	       <bean class="com.cargo.interceptor.AuthInterceptor"></bean>
 	    </mvc:interceptor>
 	</mvc:interceptors> 
+	
+	<mvc:annotation-driven />
+	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**" cache-period="31556926"/>  
+    <mvc:default-servlet-handler />  
 </beans>

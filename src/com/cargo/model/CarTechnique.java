@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import net.minidev.json.JSONObject;
 
 
-//test
 @Entity
 public class CarTechnique {
 	public enum Gearbox{
