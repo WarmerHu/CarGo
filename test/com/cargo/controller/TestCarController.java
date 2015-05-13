@@ -114,8 +114,6 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 		car.setCarTechnique(ct);
 		car.setAccount(accountDao.first());
 		dao.create(car);
-		
-		
 	}
 	
 	@Before

@@ -23,9 +23,22 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Assert;
 
 import com.cargo.dao.IAccountDao;
+import com.cargo.dao.ICarDao;
+import com.cargo.dao.IFavoriteDao;
 import com.cargo.model.Account;
+import com.cargo.model.Car;
+import com.cargo.model.CarBody;
+import com.cargo.model.CarEngine;
+import com.cargo.model.CarTechnique;
+import com.cargo.model.Favorite;
 import com.cargo.model.Account.Gender;
 import com.cargo.model.Account.ProfileType;
+import com.cargo.model.Car.CarType;
+import com.cargo.model.CarEngine.IntakeType;
+import com.cargo.model.CarEngine.OilFeedType;
+import com.cargo.model.CarTechnique.DriveType;
+import com.cargo.model.CarTechnique.Gearbox;
+import com.cargo.model.CarTechnique.ResistanceType;
 
 
 /**
@@ -40,17 +53,19 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	private MockMvc mocMvc;
 	
 	@Autowired
-	private AccountController accountController;
+	private AccountController controller;
 	
 	@Autowired
 	private IAccountDao dao;
+	@Autowired
+	private ICarDao carDao;
+	@Autowired
+	private IFavoriteDao favDao;
 	
-	
-	@Before
-	public void setup(){
-		mocMvc = MockMvcBuilders.standaloneSetup(accountController).build();
+public void initialDate(){
+		
 		Account account = new Account();
-		account.setName("testa2");
+		account.setName("testa1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -59,6 +74,64 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 		account.setTelephone("10000000001");
 		account.setType(ProfileType.Buyer);
 		dao.create(account);
+		
+		CarBody cb = new CarBody();
+		cb.setDoor(4);
+		cb.setFuelTank(4);
+		cb.setGroundClearance(140);
+		cb.setGuarantee("4年4万公里");
+		cb.setHeight(140);
+		cb.setLength(400);
+		cb.setSeat(4);
+		cb.setTrunkSpace(4);
+		cb.setWeight(400);
+		cb.setWheelbase(2040);
+		cb.setWidth(240);
+		
+		CarTechnique ct = new CarTechnique();
+		ct.setDriveType(DriveType.中置后驱);
+		ct.setGearbox(Gearbox.AT);
+		ct.setGearNum(4);
+		ct.setMaxSpeed(120);
+		ct.setResistanceType(ResistanceType.液压助力);
+		ct.setTyre("185/60R14");
+		
+		CarEngine ce = new CarEngine();
+		ce.setCylinder(4);
+		ce.setDisplacement(400);
+		ce.setEnvironmental("test环保标准001");
+		ce.setFuelLabel(90);
+		ce.setIntake(IntakeType.机械增压);
+		ce.setMaxPower(80);
+		ce.setMaxTorque(100);
+		ce.setOilFeed(OilFeedType.化油器);
+		
+		Car car = new Car();
+		car.setBrand("123");
+		car.setModel("testc1");
+		car.setStock(20001);
+		car.setPicture("f://...");
+		car.setDescription("testc1");
+		car.setPrice(20001);
+		car.setDiscount(20000);
+		car.setType(CarType.MPV商务车);
+		car.setCarBody(cb);
+		car.setCarEngine(ce);
+		car.setCarTechnique(ct);
+		car.setAccount(dao.first());
+		carDao.create(car);
+		
+		Favorite c = new Favorite();
+		c.setName("hello");
+		c.setOwner(dao.first());
+		c.addCar(car);
+		favDao.create(c);
+	}
+	
+	@Before
+	public void setup(){
+		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		initialDate();
 	}
 	
 	@Test
@@ -159,7 +232,7 @@ public class TestAccountController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
+//		dao.deleteAll();
 	}
 
 	

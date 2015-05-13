@@ -43,9 +43,26 @@ public class Account {
 	private String email;
 	private String address;
 	private String city;
+//	private Car car;
 	private List<Favorite> collections = new ArrayList<Favorite>();
 	private List<Car> cars=new ArrayList<Car>();
 //	private List<Advertisement> ad=new ArrayList<Advertisement>();
+	
+	public JSONObject toJSON(){
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("name", name);
+		obj.put("password", password);
+		obj.put("email", email);
+		obj.put("address", address);
+		obj.put("city", city);
+		obj.put("telephone", telephone);
+		if(getGender() != null){
+			obj.put("gender", getGender().name());
+		}
+		obj.put("type", getType().name());
+		return obj;
+	}
 	
 	@Column(name = "address")
 	public String getAddress() {
@@ -140,7 +157,7 @@ public class Account {
 		this.auth_token = auth_token;
 	}
 
-	@OneToMany(mappedBy="account")
+	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
 	public List<Car> getCars() {
 		return cars;
 	}
@@ -168,19 +185,5 @@ public class Account {
 //		this.ad = ad;
 //	}
 
-	public JSONObject toJSON(){
-		JSONObject obj = new JSONObject();
-		obj.put("id", id);
-		obj.put("name", name);
-		obj.put("password", password);
-		obj.put("email", email);
-		obj.put("address", address);
-		obj.put("city", city);
-		obj.put("telephone", telephone);
-		if(getGender() != null){
-			obj.put("gender", getGender().name());
-		}
-		obj.put("type", getType().name());
-		return obj;
-	}
+	
 }
