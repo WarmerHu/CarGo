@@ -1,9 +1,9 @@
 package com.cargo.dao;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import net.minidev.json.JSONObject;
 
@@ -15,6 +15,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.cargo.model.Car;
+import com.cargo.model.Car.CarType;
 import com.cargo.model.CarEngine;
 import com.cargo.model.CarEngine.IntakeType;
 import com.cargo.model.CarEngine.OilFeedType;
@@ -22,7 +23,6 @@ import com.cargo.model.CarTechnique;
 import com.cargo.model.CarTechnique.DriveType;
 import com.cargo.model.CarTechnique.Gearbox;
 import com.cargo.model.CarTechnique.ResistanceType;
-import com.cargo.model.Car.CarType;
 import com.cargo.model.Order;
 
 @Repository
@@ -106,42 +106,43 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-//	@RequestMapping(value="/cars/search/{brand}&{type}&{model}&{loprice}&{hiprice}&{gearBox}&{displacement}",method=RequestMethod.GET)
-	public List<Car> findByArgs(String...args){
+	public List<Car> findByArgs(Map<String, String> args){
 		Session session = getCurrentSession();
 		Criteria criteria=session.createCriteria(Car.class);
 		Criterion criterion = null;
-		if(!args[0].equals(""))	
-			criterion = Restrictions.eq("brand", args[0]);
-		if(!args[1].equals("")){
-			if(criterion == null)	criterion = Restrictions.eq("type", CarType.valueOf(args[1]));
-			else	criterion = Restrictions.and(criterion, Restrictions.eq("type", CarType.valueOf(args[1])));
+		if(args.containsKey("brand"))	
+			criterion = Restrictions.eq("brand", args.get("brand"));
+		if(args.containsKey("type") && Arrays.asList(CarType.values()).contains(args.get("type"))){
+			if(criterion == null)	criterion = Restrictions.eq("type", CarType.valueOf(args.get("type")));
+			else criterion = Restrictions.and(criterion, Restrictions.eq("type", CarType.valueOf(args.get("type"))));
 		}
-		if(!args[2].equals("")){
-			if(criterion == null)	criterion = Restrictions.eq("model", args[2]);
-			else	criterion = Restrictions.and(criterion, Restrictions.eq("model", args[2]));
+		if(args.containsKey("model")){
+			if(criterion == null)	criterion = Restrictions.eq("model", args.get("model"));
+			else	criterion = Restrictions.and(criterion, Restrictions.eq("model", args.get("model")));
 		}
 		
-		if(args[3].equals("")) args[3] = "0";
-		if(args[4].equals("")) args[4] = "99999999";
-		if(criterion == null)	criterion = Restrictions.between("price", Integer.parseInt(args[3]), Integer.parseInt(args[4]));
-		else	criterion = Restrictions.and(criterion, Restrictions.between("price", Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+		if(!args.containsKey("loprice")) args.put("loprice", "0");
+		if(!args.containsKey("hiprice")) args.put("hiprice", "99999999");
+		if(criterion == null)	criterion = Restrictions.between("price", Integer.parseInt(args.get("loprice")), Integer.parseInt(args.get("hiprice")));
+		else	criterion = Restrictions.and(criterion, Restrictions.between("price", Integer.parseInt(args.get("loprice")), Integer.parseInt(args.get("hiprice"))));
 		
-		if(!args[5].equals("")){
-			System.out.println(Gearbox.valueOf(args[5]).ordinal());
+		if(args.containsKey("gearBox") && Arrays.asList(Gearbox.values()).contains(args.get("gearBox"))){
+			System.out.println(Gearbox.valueOf(args.get("gearBox")).ordinal());
 			Query q = session.createQuery("from CarTechnique as c where c.gearbox=?")
-					.setInteger(0, Gearbox.valueOf(args[5]).ordinal());
+					.setInteger(0, Gearbox.valueOf(args.get("gearBox")).ordinal());
 			List<CarTechnique> a = q.list();
 			if(criterion == null)	criterion = Restrictions.in("carTechnique", a);
 			else	criterion = Restrictions.and(criterion, Restrictions.in("carTechnique", a));
 		}
 		
-		if(!args[6].equals("")){
+		if(args.containsKey("displacement")){
 			Query q = session.createQuery("from CarEngine as c where c.displacement=?")
-					.setInteger(0, Integer.parseInt(args[6]));
+					.setInteger(0, Integer.parseInt(args.get("displacement")));
 			List<CarEngine> a = q.list();
-			if(criterion == null)	criterion = Restrictions.in("carEngine", a);
-			else	criterion = Restrictions.and(criterion, Restrictions.in("carEngine", a));
+			if(!a.isEmpty()){
+				if(criterion == null)	criterion = Restrictions.in("carEngine", a);
+				else	criterion = Restrictions.and(criterion, Restrictions.in("carEngine", a));
+			}
 		}
 		
 		

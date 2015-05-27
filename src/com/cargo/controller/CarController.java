@@ -1,6 +1,8 @@
 package com.cargo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
@@ -79,11 +82,22 @@ public class CarController {
 		
 	}
 	
-//	@RequestMapping(value="/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
-	@RequestMapping(value="/cars/search/{brand}&{type}&{model}&{loprice}&{hiprice}&{gearBox}&{displacement}",method=RequestMethod.GET)
-	public @ResponseBody JSONArray list(@PathVariable String brand,@PathVariable String type,@PathVariable String model,@PathVariable String loprice,@PathVariable String hiprice,@PathVariable String gearBox, @PathVariable String displacement){
+//	@RequestMapping(value="/cars/search?keyword={keyword}&type={type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
+	@RequestMapping(value="/cars/search",method=RequestMethod.GET)
+	public @ResponseBody JSONArray list(@RequestParam(value="brand",required=false) String brand,
+		   @RequestParam(value="type",required=false) String type,@RequestParam(value="model",required=false) String model,
+		   @RequestParam(value="loprice",required=false) String loprice,@RequestParam(value="hiprice",required=false) String hiprice,
+		   @RequestParam(value="gearBox",required=false) String gearBox, @RequestParam(value="displacement",required=false) String displacement){
+		Map<String, String> args = new HashMap<String, String>();
+		if(brand != null) args.put("brand", brand);
+		if(type != null) args.put("type", type);
+		if(model != null) args.put("model", model);
+		if(loprice != null) args.put("loprice", loprice);
+		if(hiprice != null) args.put("hiprice", hiprice);
+		if(gearBox != null) args.put("gearBox", gearBox);
+		if(displacement != null) args.put("displacement", displacement);
 		JSONArray array = new JSONArray();
-		List<Car> cars = dao.findByArgs(brand,type,model,loprice,hiprice, gearBox, displacement);
+		List<Car> cars = dao.findByArgs(args);
 		for(Car car : cars){
 			array.add(car.toJSON());
 		}

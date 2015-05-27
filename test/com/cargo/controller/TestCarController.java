@@ -269,8 +269,8 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void searchs() throws Exception{
-		mocMvc.perform(get("/cars/search/{brand}&{type}&{model}&{loprice}&{hiprice}&{gearBox}&{displacement}",
-				"100", null,"testc1",null,"20001","AT",400)
+		mocMvc.perform(get("/cars/search?brand={brand}&type={type}&model={model}&hiprice={hiprice}&gearBox={gearBox}&displacement={displacement}",
+				"100", null,"testc1",20001,"AT",400)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
