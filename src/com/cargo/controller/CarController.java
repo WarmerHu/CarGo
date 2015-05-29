@@ -79,8 +79,7 @@ public class CarController {
 		
 	}
 	
-//	@RequestMapping(value="/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
-	@RequestMapping(value="/cars/search/{brand}&{type}&{model}&{loprice}&{hiprice}&{gearBox}&{displacement}",method=RequestMethod.GET)
+	@RequestMapping(value="/cars/search/{keyword}&{type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
 	public @ResponseBody JSONArray list(@PathVariable String brand,@PathVariable String type,@PathVariable String model,@PathVariable String loprice,@PathVariable String hiprice,@PathVariable String gearBox, @PathVariable String displacement){
 		JSONArray array = new JSONArray();
 		List<Car> cars = dao.findByArgs(brand,type,model,loprice,hiprice, gearBox, displacement);

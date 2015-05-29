@@ -232,7 +232,7 @@ public void initialDate(){
 	
 	@After
 	public void setdown(){
-//		dao.deleteAll();
+		dao.deleteAll();
 	}
 
 	

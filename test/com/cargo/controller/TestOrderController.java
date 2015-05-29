@@ -63,7 +63,7 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		Account account = new Account();
-		account.setName("testa1");
+		account.setName("testorder1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -74,7 +74,7 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 		accountDao.create(account);
 		
 		Car car = new Car();
-		car.setBrand("123");
+		car.setBrand("order");
 		car.setModel("testc1");
 		car.setStock(20001);
 		car.setPicture("f://...");
@@ -140,9 +140,9 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		carDao.deleteAll();
-		accountDao.deleteAll();
+//		dao.deleteAll();
+//		carDao.deleteAll();
+//		accountDao.deleteAll();
 	}
 
 	

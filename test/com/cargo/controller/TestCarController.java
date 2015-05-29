@@ -59,7 +59,7 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	public void initialDate(){
 		
 		Account account = new Account();
-		account.setName("testa1");
+		account.setName("testc1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -67,7 +67,7 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 		account.setGender(Gender.Lady);
 		account.setTelephone("10000000001");
 		account.setType(ProfileType.Buyer);
-		accountDao.create(account);
+//		accountDao.create(account);
 		
 		CarBody cb = new CarBody();
 		cb.setDoor(4);
@@ -279,8 +279,8 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		accountDao.deleteAll();
+//		dao.deleteAll();
+//		accountDao.deleteAll();
 	}
 
 	

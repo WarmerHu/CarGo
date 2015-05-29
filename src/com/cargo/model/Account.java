@@ -121,7 +121,7 @@ public class Account {
 		this.email = email;
 	}
 
-	@Column(name = "name",nullable=false,unique=true)
+//	@Column(name = "name",nullable=false,unique=true)
 	public String getName() {
 		return name;
 	}
