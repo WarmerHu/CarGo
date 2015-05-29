@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import net.minidev.json.JSONObject;
 
 import org.junit.After;
@@ -24,17 +23,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Assert;
 
 import com.cargo.dao.IAccountDao;
+import com.cargo.dao.ICarBodyDao;
 import com.cargo.dao.ICarDao;
+import com.cargo.dao.ICarEngineDao;
+import com.cargo.dao.ICarTechniqueDao;
 import com.cargo.model.Account;
+import com.cargo.model.Account.Gender;
+import com.cargo.model.Account.ProfileType;
 import com.cargo.model.Car;
+import com.cargo.model.Car.CarType;
 import com.cargo.model.CarBody;
 import com.cargo.model.CarEngine;
 import com.cargo.model.CarEngine.IntakeType;
 import com.cargo.model.CarEngine.OilFeedType;
 import com.cargo.model.CarTechnique;
-import com.cargo.model.Account.Gender;
-import com.cargo.model.Account.ProfileType;
-import com.cargo.model.Car.CarType;
 import com.cargo.model.CarTechnique.DriveType;
 import com.cargo.model.CarTechnique.Gearbox;
 import com.cargo.model.CarTechnique.ResistanceType;
@@ -55,6 +57,12 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	private ICarDao dao;
 	@Autowired
 	private IAccountDao accountDao;
+	@Autowired
+	private ICarBodyDao bodyDao;
+	@Autowired
+	private ICarEngineDao engineDao;
+	@Autowired
+	private ICarTechniqueDao techniqueDao;
 	
 	public void initialDate(){
 		
@@ -190,6 +198,10 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 				.andExpect(jsonPath("$.price").value(30002))
 				.andExpect(jsonPath("$.discount").value(30000))
 				.andReturn();
+		
+		Assert.isTrue(techniqueDao.findAll().size() >= 1);
+		Assert.isTrue(bodyDao.findAll().size() >= 1);
+		Assert.isTrue(engineDao.findAll().size() >= 1);
 	}
 	
 	@Test
@@ -269,8 +281,14 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void searchs() throws Exception{
-		mocMvc.perform(get("/cars/search?brand={brand}&type={type}&model={model}&hiprice={hiprice}&gearBox={gearBox}&displacement={displacement}",
-				"100", null,"testc1",20001,"AT",400)
+		mocMvc.perform(get("/cars/search?brand={brand}&model={model}&hiprice={hiprice}&gearBox={gearBox}&displacement={displacement}",
+				"100","testc1",20001,"AT",400)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(200))
+				.andExpect(jsonPath("$").isArray())
+				.andReturn();
+		
+		mocMvc.perform(get("/cars/search?hiprice={hiprice}", 20001)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$").isArray())
@@ -281,6 +299,9 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	public void setdown(){
 		dao.deleteAll();
 		accountDao.deleteAll();
+		techniqueDao.deleteAll();
+		engineDao.deleteAll();
+		bodyDao.deleteAll();
 	}
 
 	
