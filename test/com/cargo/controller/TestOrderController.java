@@ -63,7 +63,7 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		Account account = new Account();
-		account.setName("testa1");
+		account.setName("testorder1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -74,7 +74,7 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 		accountDao.create(account);
 		
 		Car car = new Car();
-		car.setBrand("123");
+		car.setBrand("order");
 		car.setModel("testc1");
 		car.setStock(20001);
 		car.setPicture("f://...");
@@ -94,13 +94,15 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void save() throws Exception{
+		Account account = accountDao.first();
+		
 		mocMvc.perform(post("/cars/{car_id}/orders",carDao.first().getId())
 				.content("{\"book_time\":\"2016-03-03 16:16:00\"}")
 				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", Encrypter.encode(accountDao.first())))
+				.header("Authorization", Encrypter.encode(account)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.car.price").value(20001))
-				.andExpect(jsonPath("$.buyer.name").value("testa1"))
+				.andExpect(jsonPath("$.buyer.name").value(account.getName()))
 				.andExpect(jsonPath("$.result").value("Booking"))
 				.andExpect(jsonPath("$.book_time").value("2016-03-03 16:16:00"))
 				.andReturn();

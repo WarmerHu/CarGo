@@ -43,10 +43,8 @@ public class Account {
 	private String email;
 	private String address;
 	private String city;
-//	private Car car;
 	private List<Favorite> collections = new ArrayList<Favorite>();
 	private List<Car> cars=new ArrayList<Car>();
-//	private List<Advertisement> ad=new ArrayList<Advertisement>();
 	
 	public JSONObject toJSON(){
 		JSONObject obj = new JSONObject();
@@ -175,15 +173,6 @@ public class Account {
 	public void setCollections(List<Favorite> collections) {
 		this.collections = collections;
 	}
-	
-//	@OneToMany(mappedBy="account",cascade=CascadeType.ALL)
-//	public List<Advertisement> getAd() {
-//		return ad;
-//	}
-//
-//	public void setAd(List<Advertisement> ad) {
-//		this.ad = ad;
-//	}
 
 	
 }

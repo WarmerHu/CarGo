@@ -60,7 +60,7 @@ public class TestFavoriteController extends AbstractJUnit4SpringContextTests{
 public void initialDate(){
 		
 		Account account = new Account();
-		account.setName("testa1");
+		account.setName("testfavor1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
@@ -102,7 +102,7 @@ public void initialDate(){
 		ce.setOilFeed(OilFeedType.化油器);
 		
 		Car car = new Car();
-		car.setBrand("123");
+		car.setBrand("favor");
 		car.setModel("testc1");
 		car.setStock(20001);
 		car.setPicture("f://...");
@@ -117,7 +117,7 @@ public void initialDate(){
 		carDao.create(car);
 
 		Favorite c = new Favorite();
-		c.setName("hello");
+		c.setName("favor");
 		c.setOwner(accountDao.first());
 		c.addCar(car);
 
@@ -149,13 +149,13 @@ public void initialDate(){
 	public void create() throws Exception{
 		int i  = accountDao.first().getCollections().size();
 		JSONObject obj = new JSONObject();
-		obj.put("name","hello2");
+		obj.put("name","favor2");
 		mocMvc.perform(post("/favorites")
 				.content(obj.toJSONString())
 				.header("Authorization", Encrypter.encode(accountDao.first()))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(201))
-				.andExpect(jsonPath("$.name").value("hello2"))
+				.andExpect(jsonPath("$.name").value("favor2"))
 				.andReturn();
 		Assert.assertEquals(accountDao.first().getCollections().size(), i + 1);
 	}

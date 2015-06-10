@@ -67,7 +67,7 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	public void initialDate(){
 		
 		Account account = new Account();
-		account.setName("testa1");
+		account.setName("testc1");
 		account.setPassword("testa1");
 		account.setEmail("testa1@test.com");
 		account.setAddress("testa1");
