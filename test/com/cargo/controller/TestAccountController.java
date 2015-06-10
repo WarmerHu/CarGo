@@ -107,7 +107,7 @@ public void initialDate(){
 		ce.setOilFeed(OilFeedType.化油器);
 		
 		Car car = new Car();
-		car.setBrand("123");
+		car.setBrand("1234");
 		car.setModel("testc1");
 		car.setStock(20001);
 		car.setPicture("f://...");
@@ -131,12 +131,12 @@ public void initialDate(){
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		initialDate();
+//		initialDate();
 	}
 	
 	@Test
 	public void saveAccount() throws Exception{
-		String requestBody="{\"name\":\"testa2\"," +
+		String requestBody="{\"name\":\"testa6\"," +
 							"\"password\":\"testa1\"," +
 							"\"email\":\"testa1@test.com\"," +
 							"\"address\":\"testa1\"," +
@@ -149,7 +149,7 @@ public void initialDate(){
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBody))
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.name").value("testa2"))
+				.andExpect(jsonPath("$.name").value("testa6"))
 				.andExpect(jsonPath("$.password").value("testa1"))
 				.andExpect(jsonPath("$.email").value("testa1@test.com"))
 				.andExpect(jsonPath("$.address").value("testa1"))
@@ -163,7 +163,7 @@ public void initialDate(){
 	
 	@Test
 	public void login() throws Exception{
-		String requestbody = "{\"name\":\"testa1\",\"password\":\"testa1\"}";
+		String requestbody = "{\"name\":\"testa6\",\"password\":\"testa1\"}";
 		mocMvc.perform(post("/accounts/login")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestbody))
@@ -232,9 +232,9 @@ public void initialDate(){
 	
 	@After
 	public void setdown(){
-		favDao.deleteAll();
-		carDao.deleteAll();
-		dao.deleteAll();
+//		favDao.deleteAll();
+//		carDao.deleteAll();
+//		dao.deleteAll();
 	}
 
 	

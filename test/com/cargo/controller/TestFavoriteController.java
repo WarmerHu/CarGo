@@ -142,7 +142,7 @@ public void initialDate(){
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		this.initialDate();
+//		this.initialDate();
 	}
 	
 	@Test
@@ -212,9 +212,9 @@ public void initialDate(){
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		carDao.deleteAll();
-		accountDao.deleteAll();
+//		dao.deleteAll();
+//		carDao.deleteAll();
+//		accountDao.deleteAll();
 	}
 
 	

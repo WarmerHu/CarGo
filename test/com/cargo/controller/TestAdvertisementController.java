@@ -49,30 +49,30 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(adcontroller).build();
 		
-		Account account = new Account();
-		account.setName("testads1");
-		account.setPassword("testa1");
-		account.setEmail("testa1@test.com");
-		account.setAddress("testa1");
-		account.setCity("testa1");
-		account.setGender(Gender.Lady);
-		account.setTelephone("10000000001");
-		account.setType(ProfileType.Buyer);
-		String encrypt = Encrypter.encode(account);
-		account.setAuth_token(encrypt);
-		accountDao.create(account);
-		
-		
-//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Advertisement a = new Advertisement();
-		a.setAdstate(ADState.Approval);
-//		a.setLength(df.format(new Date()));
-		a.setLink(null);
-		a.setWord(null);
-		a.setOwner(accountDao.first());
-		a.setPicture("f：//...");
-		a.setPosition(Position.Home);
-		dao.create(a);
+//		Account account = new Account();
+//		account.setName("testads1");
+//		account.setPassword("testa1");
+//		account.setEmail("testa1@test.com");
+//		account.setAddress("testa1");
+//		account.setCity("testa1");
+//		account.setGender(Gender.Lady);
+//		account.setTelephone("10000000001");
+//		account.setType(ProfileType.Buyer);
+//		String encrypt = Encrypter.encode(account);
+//		account.setAuth_token(encrypt);
+//		accountDao.create(account);
+//		
+//		
+////		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		Advertisement a = new Advertisement();
+//		a.setAdstate(ADState.Approval);
+////		a.setLength(df.format(new Date()));
+//		a.setLink(null);
+//		a.setWord(null);
+//		a.setOwner(accountDao.first());
+//		a.setPicture("f：//...");
+//		a.setPosition(Position.Home);
+//		dao.create(a);
 	}
 	
 	@Test
@@ -102,13 +102,13 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	@Test
 	public void update() throws Exception{
 		Advertisement a = dao.first();
-		String content = "{\"adstate\":\"Fail\"}";
+		String content = "{\"word\":\"ok\"}";
 		mocMvc.perform(patch("/ads/{id}",a.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(content))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").exists())
-				.andExpect(jsonPath("$.adstate").value("Fail"))
+				.andExpect(jsonPath("$.word").value("ok"))
 				.andReturn();
 	}
 	
@@ -132,8 +132,8 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		accountDao.deleteAll();
+//		dao.deleteAll();
+//		accountDao.deleteAll();
 	}
 
 	

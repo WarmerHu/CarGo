@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
+import com.cargo.dao.ICarBodyDao;
 import com.cargo.dao.ICarDao;
+import com.cargo.dao.ICommentDao;
 import com.cargo.dao.IFavoriteDao;
+import com.cargo.dao.IOrderDao;
 import com.cargo.model.Account;
 import com.cargo.model.Car;
 import com.cargo.util.HttpUtil;
@@ -33,9 +36,15 @@ public class CarController {
 	@Autowired
 	private ICarDao dao;
 	@Autowired
+	private ICarBodyDao cbDao;
+	@Autowired
 	private IAccountDao accountDao;
 	@Autowired
 	private IFavoriteDao favorDao;
+	@Autowired
+	private ICommentDao comDao;
+	@Autowired
+	private IOrderDao orderDao;
 	
 	@RequestMapping(value="/cars",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
@@ -77,7 +86,11 @@ public class CarController {
 	public @ResponseBody void delete(@PathVariable Long id){
 //		Session s = dao.getCurrentSession();
 //		Car c = (Car)s.load(Car.class,id);
+		comDao.deleteByCarId(id);
+		orderDao.deleteByCarId(id);
+//		cbDao.deleteById(id);
 		dao.deleteById(id);
+		
 //		s.delete(c); 
 		
 	}

@@ -127,7 +127,7 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		initialDate();
+//		initialDate();
 	}
 	
 	
@@ -297,11 +297,11 @@ public class TestCarController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		accountDao.deleteAll();
-		techniqueDao.deleteAll();
-		engineDao.deleteAll();
-		bodyDao.deleteAll();
+//		dao.deleteAll();
+//		accountDao.deleteAll();
+//		techniqueDao.deleteAll();
+//		engineDao.deleteAll();
+//		bodyDao.deleteAll();
 	}
 
 	
