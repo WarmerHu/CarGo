@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
@@ -82,12 +84,37 @@ public class CarController {
 		
 	}
 	
-//	@RequestMapping(value="/cars/search?keyword={keyword}&type={type}&{brand}&{model}&{city}&{suppliers}&{loprice}&{hiprice}",method=RequestMethod.GET)
 	@RequestMapping(value="/cars/search",method=RequestMethod.GET)
 	public @ResponseBody JSONArray list(@RequestParam(value="brand",required=false) String brand,
 		   @RequestParam(value="type",required=false) String type,@RequestParam(value="model",required=false) String model,
 		   @RequestParam(value="loprice",required=false) String loprice,@RequestParam(value="hiprice",required=false) String hiprice,
-		   @RequestParam(value="gearBox",required=false) String gearBox, @RequestParam(value="displacement",required=false) String displacement){
+		   @RequestParam(value="gearBox",required=false) String gearBox, @RequestParam(value="displacement",required=false) String displacement, HttpServletRequest request){
+		
+		Map<String, String> args = new HashMap<String, String>();
+		if(brand != null) args.put("brand", brand);
+		if(type != null) args.put("type", type);
+		if(model != null) args.put("model", model);
+		if(loprice != null) args.put("loprice", loprice);
+		if(hiprice != null) args.put("hiprice", hiprice);
+		if(gearBox != null) args.put("gearBox", gearBox);
+		if(displacement != null) args.put("displacement", displacement);
+		JSONArray array = new JSONArray();
+		List<Car> cars = dao.findByArgs(args);
+		for(Car car : cars){
+			array.add(car.toJSON());
+		}
+		return array;
+	}
+	
+	@RequestMapping(value="/cars/search",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
+	public @ResponseBody JSONArray list(@RequestBody JSONObject obj, HttpServletRequest request){
+		String brand = (String) obj.get("brand");
+		String model = (String) obj.get("model");
+		String type = (String) obj.get("type");
+		String loprice = (String) obj.get("loprice");
+		String hiprice = (String) obj.get("hiprice");
+		String gearBox = (String) obj.get("gearBox");
+		String displacement = (String) obj.get("displacement");
 		Map<String, String> args = new HashMap<String, String>();
 		if(brand != null) args.put("brand", brand);
 		if(type != null) args.put("type", type);
