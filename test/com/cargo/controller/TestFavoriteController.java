@@ -122,18 +122,18 @@ public void initialDate(){
 		c.addCar(car);
 
 		
-//		car = new Car();
-//		car.setBrand("321");
-//		car.setModel("testc2");
-//		car.setStock(20002);
-//		car.setPicture("f://...");
-//		car.setDescription("testc2");
-//		car.setPrice(20002);
-//		car.setType(CarType.SUV越野车);
-//		car.setAccount(accountDao.first());
-//		carDao.create(car);
-//
-//		c.addCar(car);
+		car = new Car();
+		car.setBrand("321");
+		car.setModel("testc2");
+		car.setStock(20002);
+		car.setPicture("f://...");
+		car.setDescription("testc2");
+		car.setPrice(20002);
+		car.setType(CarType.SUV越野车);
+		car.setAccount(accountDao.first());
+		carDao.create(car);
+
+		c.addCar(car);
 		dao.create(c);
 
 
@@ -142,7 +142,7 @@ public void initialDate(){
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-//		this.initialDate();
+		this.initialDate();
 	}
 	
 	@Test
@@ -212,9 +212,9 @@ public void initialDate(){
 	
 	@After
 	public void setdown(){
-//		dao.deleteAll();
-//		carDao.deleteAll();
-//		accountDao.deleteAll();
+		dao.deleteAll();
+		carDao.deleteAll();
+		accountDao.deleteAll();
 	}
 
 	

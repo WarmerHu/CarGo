@@ -131,7 +131,7 @@ public void initialDate(){
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-//		initialDate();
+		initialDate();
 	}
 	
 	@Test
@@ -163,7 +163,7 @@ public void initialDate(){
 	
 	@Test
 	public void login() throws Exception{
-		String requestbody = "{\"name\":\"testa6\",\"password\":\"testa1\"}";
+		String requestbody = "{\"name\":\"testa1\",\"password\":\"testa1\"}";
 		mocMvc.perform(post("/accounts/login")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestbody))
@@ -232,9 +232,9 @@ public void initialDate(){
 	
 	@After
 	public void setdown(){
-//		favDao.deleteAll();
-//		carDao.deleteAll();
-//		dao.deleteAll();
+		favDao.deleteAll();
+		carDao.deleteAll();
+		dao.deleteAll();
 	}
 
 	

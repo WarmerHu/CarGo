@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
-import com.cargo.dao.ICarBodyDao;
 import com.cargo.dao.ICarDao;
 import com.cargo.dao.ICommentDao;
 import com.cargo.dao.IFavoriteDao;
@@ -37,8 +36,6 @@ public class CarController {
 	
 	@Autowired
 	private ICarDao dao;
-	@Autowired
-	private ICarBodyDao cbDao;
 	@Autowired
 	private IAccountDao accountDao;
 	@Autowired

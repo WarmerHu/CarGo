@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import net.minidev.json.JSONObject;
 
 import org.junit.After;
@@ -23,9 +22,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.IAdvertisementDao;
 import com.cargo.model.Account;
-import com.cargo.model.Advertisement;
 import com.cargo.model.Account.Gender;
 import com.cargo.model.Account.ProfileType;
+import com.cargo.model.Advertisement;
 import com.cargo.model.Advertisement.ADState;
 import com.cargo.model.Advertisement.Position;
 import com.cargo.util.Encrypter;
@@ -49,30 +48,30 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(adcontroller).build();
 		
-//		Account account = new Account();
-//		account.setName("testads1");
-//		account.setPassword("testa1");
-//		account.setEmail("testa1@test.com");
-//		account.setAddress("testa1");
-//		account.setCity("testa1");
-//		account.setGender(Gender.Lady);
-//		account.setTelephone("10000000001");
-//		account.setType(ProfileType.Buyer);
-//		String encrypt = Encrypter.encode(account);
-//		account.setAuth_token(encrypt);
-//		accountDao.create(account);
-//		
-//		
-////		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		Advertisement a = new Advertisement();
-//		a.setAdstate(ADState.Approval);
-////		a.setLength(df.format(new Date()));
-//		a.setLink(null);
-//		a.setWord(null);
-//		a.setOwner(accountDao.first());
-//		a.setPicture("f：//...");
-//		a.setPosition(Position.Home);
-//		dao.create(a);
+		Account account = new Account();
+		account.setName("testads1");
+		account.setPassword("testa1");
+		account.setEmail("testa1@test.com");
+		account.setAddress("testa1");
+		account.setCity("testa1");
+		account.setGender(Gender.Lady);
+		account.setTelephone("10000000001");
+		account.setType(ProfileType.Buyer);
+		String encrypt = Encrypter.encode(account);
+		account.setAuth_token(encrypt);
+		accountDao.create(account);
+		
+		
+//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Advertisement a = new Advertisement();
+		a.setAdstate(ADState.Approval);
+//		a.setLength(df.format(new Date()));
+		a.setLink(null);
+		a.setWord(null);
+		a.setOwner(accountDao.first());
+		a.setPicture("f：//...");
+		a.setPosition(Position.Home);
+		dao.create(a);
 	}
 	
 	@Test
@@ -132,8 +131,8 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	
 	@After
 	public void setdown(){
-//		dao.deleteAll();
-//		accountDao.deleteAll();
+		dao.deleteAll();
+		accountDao.deleteAll();
 	}
 
 	
