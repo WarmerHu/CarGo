@@ -63,34 +63,34 @@ public class TestCommentController extends AbstractJUnit4SpringContextTests{
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		Account account = new Account();
-		account.setName("testcomment1");
-		account.setPassword("testa1");
-		account.setEmail("testa1@test.com");
-		account.setAddress("testa1");
-		account.setCity("testa1");
-		account.setGender(Gender.Lady);
-		account.setTelephone("10000000001");
-		account.setType(ProfileType.Buyer);
-		accountDao.create(account);
-		
-		Car car = new Car();
-		car.setBrand("123testcomment");
-		car.setModel("testc1");
-		car.setStock(20001);
-		car.setPicture("f://...");
-		car.setDescription("testc1");
-		car.setPrice(20001);
-		car.setType(CarType.MPV商务车);
-		car.setAccount(accountDao.first());
-		carDao.create(car);
-		
-		Comment comment = new Comment();
-		comment.setCar(car);
-		comment.setOwner(account);
-		comment.setTime(new Date());
-		comment.setContent("hello is a good car");
-		dao.create(comment);
+//		Account account = new Account();
+//		account.setName("testcomment1");
+//		account.setPassword("testa1");
+//		account.setEmail("testa1@test.com");
+//		account.setAddress("testa1");
+//		account.setCity("testa1");
+//		account.setGender(Gender.Lady);
+//		account.setTelephone("10000000001");
+//		account.setType(ProfileType.Buyer);
+//		accountDao.create(account);
+//		
+//		Car car = new Car();
+//		car.setBrand("123testcomment");
+//		car.setModel("testc1");
+//		car.setStock(20001);
+//		car.setPicture("f://...");
+//		car.setDescription("testc1");
+//		car.setPrice(20001);
+//		car.setType(CarType.MPV商务车);
+//		car.setAccount(accountDao.first());
+//		carDao.create(car);
+//		
+//		Comment comment = new Comment();
+//		comment.setCar(car);
+//		comment.setOwner(account);
+//		comment.setTime(new Date());
+//		comment.setContent("hello is a good car");
+//		dao.create(comment);
 	}
 	
 	@Test
@@ -129,9 +129,9 @@ public class TestCommentController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		carDao.deleteAll();
-		accountDao.deleteAll();
+//		dao.deleteAll();
+//		carDao.deleteAll();
+//		accountDao.deleteAll();
 	}
 
 	

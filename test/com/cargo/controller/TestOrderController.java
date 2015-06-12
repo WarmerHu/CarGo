@@ -62,34 +62,34 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	@Before
 	public void setup(){
 		mocMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		Account account = new Account();
-		account.setName("testorder1");
-		account.setPassword("testa1");
-		account.setEmail("testa1@test.com");
-		account.setAddress("testa1");
-		account.setCity("testa1");
-		account.setGender(Gender.Lady);
-		account.setTelephone("10000000001");
-		account.setType(ProfileType.Buyer);
-		accountDao.create(account);
-		
-		Car car = new Car();
-		car.setBrand("order");
-		car.setModel("testc1");
-		car.setStock(20001);
-		car.setPicture("f://...");
-		car.setDescription("testc1");
-		car.setPrice(20001);
-		car.setType(CarType.三厢);
-		car.setAccount(accountDao.first());
-		carDao.create(car);
-		
-		Order order = new Order();
-		order.setCar(car);
-		order.setBuyer(account);
-		order.setBook_time(new Date());
-		order.setResult(Result.Booked);
-		dao.create(order);
+//		Account account = new Account();
+//		account.setName("testorder1");
+//		account.setPassword("testa1");
+//		account.setEmail("testa1@test.com");
+//		account.setAddress("testa1");
+//		account.setCity("testa1");
+//		account.setGender(Gender.Lady);
+//		account.setTelephone("10000000001");
+//		account.setType(ProfileType.Buyer);
+//		accountDao.create(account);
+//		
+//		Car car = new Car();
+//		car.setBrand("order");
+//		car.setModel("testc1");
+//		car.setStock(20001);
+//		car.setPicture("f://...");
+//		car.setDescription("testc1");
+//		car.setPrice(20001);
+//		car.setType(CarType.三厢);
+//		car.setAccount(accountDao.first());
+//		carDao.create(car);
+//		
+//		Order order = new Order();
+//		order.setCar(car);
+//		order.setBuyer(account);
+//		order.setBook_time(new Date());
+//		order.setResult(Result.Booked);
+//		dao.create(order);
 	}
 	
 	@Test
@@ -142,9 +142,9 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 	
 	@After
 	public void setdown(){
-		dao.deleteAll();
-		carDao.deleteAll();
-		accountDao.deleteAll();
+//		dao.deleteAll();
+//		carDao.deleteAll();
+//		accountDao.deleteAll();
 	}
 
 	
