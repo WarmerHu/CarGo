@@ -114,13 +114,27 @@ public class CarController {
 	
 	@RequestMapping(value="/cars/search",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	public @ResponseBody JSONArray list(@RequestBody JSONObject obj, HttpServletRequest request){
-		String brand = (String) obj.get("brand");
-		String model = (String) obj.get("model");
-		String type = (String) obj.get("type");
-		String loprice = (String) obj.get("loprice");
-		String hiprice = (String) obj.get("hiprice");
-		String gearBox = (String) obj.get("gearBox");
-		String displacement = (String) obj.get("displacement");
+		String brand = null;
+		String model = null;
+		String type = null;
+		String loprice = null;
+		String hiprice = null;
+		String gearBox = null;
+		String displacement = null;
+		if(obj.containsKey("brand"))
+			brand = (String) obj.get("brand");
+		if(obj.containsKey("model"))
+			model = (String) obj.get("model");
+		if(obj.containsKey("type"))
+			type = (String) obj.get("type");
+		if(obj.containsKey("loprice"))
+			loprice = (String) obj.get("loprice");
+		if(obj.containsKey("hiprice"))
+			hiprice = (String) obj.get("hiprice");
+		if(obj.containsKey("gearBox"))
+			gearBox = (String) obj.get("gearBox");
+		if(obj.containsKey("displacement"))
+			displacement = (String) obj.get("displacement");
 		Map<String, String> args = new HashMap<String, String>();
 		if(brand != null) args.put("brand", brand);
 		if(type != null) args.put("type", type);
