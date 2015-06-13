@@ -38,7 +38,7 @@ public class CarTechnique {
 		obj.put("id", id);
 		obj.put("gearbox", getGearbox().toString());
 		obj.put("maxSpeed", maxSpeed);
-		obj.put("trye", tyre);
+		obj.put("tyre", tyre);
 		obj.put("gearNum", gearNum);
 		obj.put("driveType", getDriveType().toString());
 		obj.put("resistanceType", getResistanceType().toString());
