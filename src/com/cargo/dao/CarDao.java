@@ -49,7 +49,7 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 		if(obj.get("brand") != null) car.setBrand(obj.get("brand").toString());
 		if(obj.get("model") != null) car.setModel(obj.get("model").toString());
 		if(obj.get("type") != null) car.setType(CarType.valueOf(obj.get("type").toString()));
-		if(obj.get("description") != null) car.setDescription(obj.get("Description").toString());
+		if(obj.get("description") != null) car.setDescription(obj.get("description").toString());
 		if(obj.get("price") != null) car.setPrice((Integer) obj.get("price"));
 		if(obj.get("discount") != null) car.setDiscount((Integer) obj.get("discount"));
 		System.out.println("car.gets:"+car.getStock());
@@ -68,7 +68,6 @@ public class CarDao extends BaseDao<Car> implements ICarDao {
 			if(cb.get("trunkSpace") != null) car.getCarBody().setTrunkSpace(Integer.parseInt(String.valueOf(cb.get("trunkSpace"))));
 			if(cb.get("weight") != null) car.getCarBody().setWeight(Integer.parseInt(String.valueOf(cb.get("weight"))));
 			if(cb.get("wheelbase") != null) car.getCarBody().setWheelbase(Integer.parseInt(String.valueOf(cb.get("wheelbase"))));
-			if(cb.get("width") != null) car.getCarBody().setWidth(Integer.parseInt(String.valueOf(cb.get("width"))));
 			if(cb.get("width") != null) car.getCarBody().setWidth(Integer.parseInt(String.valueOf(cb.get("width"))));
 			System.out.println(car.getCarBody().getDoor());
 		}

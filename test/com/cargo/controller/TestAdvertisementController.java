@@ -79,7 +79,7 @@ public class TestAdvertisementController extends AbstractJUnit4SpringContextTest
 	public void save() throws Exception{
 		
 		JSONObject obj = new JSONObject();
-		obj.put("link", "testad1");
+		obj.put("link", "testad2");
 		obj.put("picture", "testad1://a/ad.jpg");
 		obj.put("position", "Top");
 		obj.put("word", "testad1");

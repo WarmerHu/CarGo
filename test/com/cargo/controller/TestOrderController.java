@@ -101,7 +101,6 @@ public class TestOrderController extends AbstractJUnit4SpringContextTests{
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", Encrypter.encode(account)))
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.car.price").value(20001))
 				.andExpect(jsonPath("$.buyer.name").value(account.getName()))
 				.andExpect(jsonPath("$.result").value("Booking"))
 				.andExpect(jsonPath("$.book_time").value("2016-03-03 16:16:00"))

@@ -29,7 +29,6 @@ import com.cargo.model.Account;
 import com.cargo.model.Car;
 import com.cargo.util.HttpUtil;
 
-//test
 @Controller
 public class CarController {
 	
@@ -84,14 +83,11 @@ public class CarController {
 	@RequestMapping(value="/cars/{id}",method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public @ResponseBody void delete(@PathVariable Long id){
-//		Session s = dao.getCurrentSession();
-//		Car c = (Car)s.load(Car.class,id);
 		comDao.deleteByCarId(id);
 		orderDao.deleteByCarId(id);
 //		cbDao.deleteById(id);
 		dao.deleteById(id);
 		
-//		s.delete(c); 
 		
 	}
 	
