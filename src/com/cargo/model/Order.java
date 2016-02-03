@@ -1,28 +1,68 @@
 package com.cargo.model;
 
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import net.minidev.json.JSONObject;
+
 @Entity
-@Table(name="order")
+@Table(name="orders")
 public class Order{
-	private OrderPK pk;
+	public enum Result{
+		Booking,Booked,Checked,Bought,Cancel
+	};
+	
+	private Long id;
 	private Date book_time;
+	private Account buyer;
+	private Car car;
+	private Result result;
 	
 	@Id
-	public OrderPK getPk() {
-		return pk;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public Long getId() {
+		return id;
 	}
-	public void setPk(OrderPK pk) {
-		this.pk = pk;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="result",nullable=false)
+	public Result getResult() {
+		return result;
+	}
+	public void setResult(Result result) {
+		this.result = result;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="buyer")
+	public Account getBuyer() {
+		return buyer;
+	}
+	public void setBuyer(Account buyer) {
+		this.buyer = buyer;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="car")
+	public Car getCar() {
+		return car;
+	}
+	public void setCar(Car car) {
+		this.car = car;
 	}
 	
 	@Column(name="book_time")
@@ -33,55 +73,14 @@ public class Order{
 		this.book_time = book_time;
 	}
 	
-}
-
-@Embeddable
-class OrderPK implements Serializable{
-	public enum Result{
-		Booking,Booked,Checked,Bought,Cancel
-	};
-	private Customer cmid;
-	private Car carid;
-	private Result result;
-	
-	@Column(name="result")
-	public Result getResult() {
-		return result;
-	}
-	public void setResult(Result result) {
-		this.result = result;
-	}
-	@ManyToOne
-	@JoinColumn(name="cmid")
-	public Customer getCmid() {
-		return cmid;
-	}
-	public void setCmid(Customer cmid) {
-		this.cmid = cmid;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("car",car.toJSON());
+		obj.put("buyer",buyer.toJSON());
+		obj.put("book_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(book_time));
+		obj.put("result", result.name());
+		return obj;
 	}
 	
-	@ManyToOne
-	@JoinColumn(name="carid")
-	public Car getCarid() {
-		return carid;
-	}
-	public void setCarid(Car carid) {
-		this.carid = carid;
-	}
-	
-	@Override 
-    public boolean equals(Object obj) { 
-        if(obj instanceof OrderPK){ 
-        	OrderPK pk=(OrderPK)obj; 
-            if(this.cmid.equals(pk.cmid) && this.carid.equals(pk.carid) && this.result.equals(pk.result)){ 
-                return true; 
-            } 
-        } 
-        return false; 
-    }
-
-    @Override 
-    public int hashCode() { 
-        return super.hashCode(); 
-    }
 }

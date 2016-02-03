@@ -1,7 +1,12 @@
 package com.cargo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +16,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 
 import com.cargo.dao.IAccountDao;
 import com.cargo.dao.ICarDao;
+import com.cargo.dao.ICommentDao;
+import com.cargo.dao.IFavoriteDao;
+import com.cargo.dao.IOrderDao;
+import com.cargo.model.Account;
 import com.cargo.model.Car;
+import com.cargo.util.HttpUtil;
 
 @Controller
 public class CarController {
@@ -25,39 +37,118 @@ public class CarController {
 	private ICarDao dao;
 	@Autowired
 	private IAccountDao accountDao;
+	@Autowired
+	private IFavoriteDao favorDao;
+	@Autowired
+	private ICommentDao comDao;
+	@Autowired
+	private IOrderDao orderDao;
 	
-	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.POST)
+	@RequestMapping(value="/cars",method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public @ResponseBody JSONObject create(@RequestBody Car car,@PathVariable Long account_id){
-		car.setOwner(accountDao.find(account_id));
+	public @ResponseBody JSONObject create(@RequestBody Car car,WebRequest request){
+		car.setAccount(new HttpUtil(accountDao).getCurrentUser(request));
+		System.out.println(car.getCarBody());
 		return dao.create(car).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/cars",method=RequestMethod.GET)
+	public @ResponseBody JSONArray list(WebRequest request){
+		Account currentUser = new HttpUtil(accountDao).getCurrentUser(request);
+		JSONArray array = new JSONArray();
+		
+		List<Car> cars = dao.findAll();
+		JSONObject obj;
+		for(Car car : cars){
+			obj = car.toJSON();
+			obj.put("isFavor", favorDao.isFavor(currentUser, car));
+			array.add(obj);
+		}
+		return array;
+	}
+	
+	@RequestMapping(value="/cars/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject show(@PathVariable Long id){
 		return dao.find(id).toJSON();
 	}
 	
-	@RequestMapping(value="/accounts/{account_id}/cars",method=RequestMethod.GET)
-	public @ResponseBody List<Car> list(){
-		return dao.findAll();
-	}
-	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.DELETE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public @ResponseBody void delete(@PathVariable Long id){
-		dao.deleteById(id);
-	}
-	
-	@RequestMapping(value="/accounts/{account_id}/cars/{id}",method=RequestMethod.PATCH)
-	public @ResponseBody JSONObject patch(@RequestBody Car car,@PathVariable Long account_id,@PathVariable Long id){
-		Car old = dao.find(id);
-		if(car.getDescription() == null) car.setDescription(old.getDescription());
-		if(car.getPrice() == null) car.setPrice(old.getPrice());
-		if(car.getOwner() == null) car.setOwner(old.getOwner());
-		if(car.getType() == null) car.setType(old.getType());
-		car.setId(id);
-		dao.update(car);
+	@RequestMapping(value="/cars/{id}",method=RequestMethod.PATCH)
+	public @ResponseBody JSONObject patch(@RequestBody JSONObject obj,@PathVariable Long id){
+		Car car = dao.find(id);
+		dao.update(car,obj);
 		return dao.find(id).toJSON();
 	}
+	
+	@RequestMapping(value="/cars/{id}",method=RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public @ResponseBody void delete(@PathVariable Long id){
+		comDao.deleteByCarId(id);
+		orderDao.deleteByCarId(id);
+//		cbDao.deleteById(id);
+		dao.deleteById(id);
+		
+		
+	}
+	
+	@RequestMapping(value="/cars/search",method=RequestMethod.GET)
+	public @ResponseBody JSONArray list(@RequestParam(value="brand",required=false) String brand,
+		   @RequestParam(value="type",required=false) String type,@RequestParam(value="model",required=false) String model,
+		   @RequestParam(value="loprice",required=false) String loprice,@RequestParam(value="hiprice",required=false) String hiprice,
+		   @RequestParam(value="gearBox",required=false) String gearBox, @RequestParam(value="displacement",required=false) String displacement, HttpServletRequest request){
+		
+		Map<String, String> args = new HashMap<String, String>();
+		if(brand != null) args.put("brand", brand);
+		if(type != null) args.put("type", type);
+		if(model != null) args.put("model", model);
+		if(loprice != null) args.put("loprice", loprice);
+		if(hiprice != null) args.put("hiprice", hiprice);
+		if(gearBox != null) args.put("gearBox", gearBox);
+		if(displacement != null) args.put("displacement", displacement);
+		JSONArray array = new JSONArray();
+		List<Car> cars = dao.findByArgs(args);
+		for(Car car : cars){
+			array.add(car.toJSON());
+		}
+		return array;
+	}
+	
+	@RequestMapping(value="/cars/search",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
+	public @ResponseBody JSONArray list(@RequestBody JSONObject obj, HttpServletRequest request){
+		String brand = null;
+		String model = null;
+		String type = null;
+		String loprice = null;
+		String hiprice = null;
+		String gearBox = null;
+		String displacement = null;
+		if(obj.containsKey("brand"))
+			brand = (String) obj.get("brand");
+		if(obj.containsKey("model"))
+			model = (String) obj.get("model");
+		if(obj.containsKey("type"))
+			type = (String) obj.get("type");
+		if(obj.containsKey("loprice"))
+			loprice = (String) obj.get("loprice");
+		if(obj.containsKey("hiprice"))
+			hiprice = (String) obj.get("hiprice");
+		if(obj.containsKey("gearBox"))
+			gearBox = (String) obj.get("gearBox");
+		if(obj.containsKey("displacement"))
+			displacement = (String) obj.get("displacement");
+		Map<String, String> args = new HashMap<String, String>();
+		if(brand != null) args.put("brand", brand);
+		if(type != null) args.put("type", type);
+		if(model != null) args.put("model", model);
+		if(loprice != null) args.put("loprice", loprice);
+		if(hiprice != null) args.put("hiprice", hiprice);
+		if(gearBox != null) args.put("gearBox", gearBox);
+		if(displacement != null) args.put("displacement", displacement);
+		JSONArray array = new JSONArray();
+		List<Car> cars = dao.findByArgs(args);
+		for(Car car : cars){
+			array.add(car.toJSON());
+		}
+		return array;
+	}
+	
 }
